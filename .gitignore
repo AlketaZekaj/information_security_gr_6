@@ -1,0 +1,8 @@
+# Generated at run time by generator/make_keys.py and generator/generate.py
+keys/*.pem
+tokens/
+
+__pycache__/
+*.pyc
+.venv/
+node_modules/

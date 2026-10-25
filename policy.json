@@ -1,0 +1,7 @@
+{
+  "issuer": "https://auth.example.test",
+  "audience": "jwt-eval-api",
+  "allowed_algorithms": ["RS256"],
+  "required_claims": ["iss", "aud", "exp"],
+  "clock_skew_seconds": 0
+}
