@@ -6,3 +6,25 @@ __pycache__/
 *.pyc
 .venv/
 node_modules/
+
+# Local test dependencies and .NET build output
+.tools/
+bin/
+obj/
+
+# Generated process/build logs; keep CSV, JSON evidence and Markdown reports
+results/**/logs/
+*.log
+
+# Local editor settings and environment files
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Python test/tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

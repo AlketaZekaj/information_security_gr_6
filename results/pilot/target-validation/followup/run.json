@@ -1,0 +1,806 @@
+{
+  "started_at_utc": "2026-10-25T18:39:16.170481+00:00",
+  "environment": "native Windows; Docker unavailable",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.0 (main, Oct 24 2022, 18:26:48) [MSC v.1933 64 bit (AMD64)]",
+  "base_commit": "0894b1a2cfffc411057d2fb1b57eb195d16a8336",
+  "components": {
+    "dotnet-jwtbearer": {
+      "dotnet_info": ".NET SDK:\n Version:           8.0.403\n Commit:            c64aa40a71\n Workload version:  8.0.400-manifests.18f19b92\n MSBuild version:   17.11.9+a69bbaaf5\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.26200\n OS Platform: Windows\n RID:         win-x64\n Base Path:   C:\\Program Files\\dotnet\\sdk\\8.0.403\\\n\n.NET workloads installed:\nConfigured to use loose manifests when installing new manifests.\nThere are no installed workloads to display.\n\nHost:\n  Version:      8.0.10\n  Architecture: x64\n  Commit:       81cabf2857\n\n.NET SDKs installed:\n  7.0.101 [C:\\Program Files\\dotnet\\sdk]\n  8.0.403 [C:\\Program Files\\dotnet\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 6.0.12 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 7.0.1 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.AspNetCore.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 6.0.12 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 7.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 7.0.1 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.NETCore.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 6.0.12 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 7.0.0 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 7.0.1 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n  Microsoft.WindowsDesktop.App 8.0.10 [C:\\Program Files\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  x86   [C:\\Program Files (x86)\\dotnet]\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+      "packages": {
+        "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8",
+        "Microsoft.IdentityModel.Abstractions": "7.1.2",
+        "Microsoft.IdentityModel.JsonWebTokens": "7.1.2",
+        "Microsoft.IdentityModel.Logging": "7.1.2",
+        "Microsoft.IdentityModel.Protocols": "7.1.2",
+        "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2",
+        "Microsoft.IdentityModel.Tokens": "7.1.2"
+      }
+    },
+    "dotnet-jsonwebtokenhandler": {
+      "dotnet_info": ".NET SDK:\n Version:           10.0.402\n Commit:            a8dd0577c5\n Workload version:  10.0.400-manifests.da132f47\n MSBuild version:   18.9.15+a8dd0577c\n\nRuntime Environment:\n OS Name:     Windows\n OS Version:  10.0.26200\n OS Platform: Windows\n RID:         win-x64\n Base Path:   <repository>\\.tools\\dotnet\\sdk\\10.0.402\\\n\n.NET workloads installed:\nThere are no installed workloads to display.\nConfigured to use workload sets when installing new manifests.\nNo workload sets are installed. Run \"dotnet workload restore\" to install a workload set.\n\nHost:\n  Version:      10.0.13\n  Architecture: x64\n  Commit:       4099f83977\n\n.NET SDKs installed:\n  10.0.402 [<repository>\\.tools\\dotnet\\sdk]\n\n.NET runtimes installed:\n  Microsoft.AspNetCore.App 10.0.13 [<repository>\\.tools\\dotnet\\shared\\Microsoft.AspNetCore.App]\n  Microsoft.NETCore.App 10.0.13 [<repository>\\.tools\\dotnet\\shared\\Microsoft.NETCore.App]\n  Microsoft.WindowsDesktop.App 10.0.13 [<repository>\\.tools\\dotnet\\shared\\Microsoft.WindowsDesktop.App]\n\nOther architectures found:\n  x86   [C:\\Program Files (x86)\\dotnet]\n    registered at [HKLM\\SOFTWARE\\dotnet\\Setup\\InstalledVersions\\x86\\InstallLocation]\n\nEnvironment variables:\n  Not set\n\nglobal.json file:\n  Not found\n\nLearn more:\n  https://aka.ms/dotnet/info\n\nDownload .NET:\n  https://aka.ms/dotnet/download\n",
+      "packages": {
+        "Microsoft.Bcl.Cryptography": "10.0.2",
+        "Microsoft.IdentityModel.Abstractions": "8.19.1",
+        "Microsoft.IdentityModel.JsonWebTokens": "8.19.1",
+        "Microsoft.IdentityModel.Logging": "8.19.1",
+        "Microsoft.IdentityModel.Tokens": "8.19.1"
+      }
+    },
+    "node-jose": {
+      "node": "v24.11.1",
+      "packages": {
+        "jose": "6.2.13",
+        "express": "5.3.0"
+      }
+    }
+  },
+  "gates": [
+    {
+      "component": "dotnet-jwtbearer",
+      "config": "default",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "\"ok\"",
+        "headers": {
+          "Connection": "close",
+          "Content-Type": "application/json; charset=utf-8",
+          "Date": "Sun, 25 Oct 2026 18:39:19 GMT",
+          "Server": "Kestrel",
+          "Transfer-Encoding": "chunked"
+        },
+        "latency_ms": 71.11130002886057
+      }
+    },
+    {
+      "component": "dotnet-jwtbearer",
+      "config": "hardened",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "\"ok\"",
+        "headers": {
+          "Connection": "close",
+          "Content-Type": "application/json; charset=utf-8",
+          "Date": "Sun, 25 Oct 2026 18:39:20 GMT",
+          "Server": "Kestrel",
+          "Transfer-Encoding": "chunked"
+        },
+        "latency_ms": 60.35510008223355
+      }
+    },
+    {
+      "component": "dotnet-jsonwebtokenhandler",
+      "config": "default",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "\"ok\"",
+        "headers": {
+          "Connection": "close",
+          "Content-Type": "application/json; charset=utf-8",
+          "Date": "Sun, 25 Oct 2026 18:39:21 GMT",
+          "Server": "Kestrel",
+          "Transfer-Encoding": "chunked"
+        },
+        "latency_ms": 65.74280001223087
+      }
+    },
+    {
+      "component": "dotnet-jsonwebtokenhandler",
+      "config": "hardened",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "\"ok\"",
+        "headers": {
+          "Connection": "close",
+          "Content-Type": "application/json; charset=utf-8",
+          "Date": "Sun, 25 Oct 2026 18:39:22 GMT",
+          "Server": "Kestrel",
+          "Transfer-Encoding": "chunked"
+        },
+        "latency_ms": 63.206200022250414
+      }
+    },
+    {
+      "component": "node-jose",
+      "config": "default",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "ok",
+        "headers": {
+          "X-Powered-By": "Express",
+          "Content-Type": "text/html; charset=utf-8",
+          "Content-Length": "2",
+          "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+          "Date": "Sun, 25 Oct 2026 18:39:24 GMT",
+          "Connection": "close"
+        },
+        "latency_ms": 15.404900070279837
+      }
+    },
+    {
+      "component": "node-jose",
+      "config": "hardened",
+      "test_id": "CTRL-01",
+      "predicted": "accept",
+      "actual": "accept",
+      "matches_prediction": true,
+      "token_sha256": "3c33e9963d9fb6fa380cc38ccc0565870496d7ddebaa5e2264a16933474d072c",
+      "response": {
+        "status": 200,
+        "body": "ok",
+        "headers": {
+          "X-Powered-By": "Express",
+          "Content-Type": "text/html; charset=utf-8",
+          "Content-Length": "2",
+          "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+          "Date": "Sun, 25 Oct 2026 18:39:25 GMT",
+          "Connection": "close"
+        },
+        "latency_ms": 6.096299970522523
+      }
+    }
+  ],
+  "token_generations": [
+    {
+      "phase": "preflight",
+      "index": {
+        "generated_at": "2026-10-25T18:39:18Z",
+        "now": 1792953558,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "dotnet-jwtbearer-default",
+      "index": {
+        "generated_at": "2026-10-25T18:39:25Z",
+        "now": 1792953565,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "dotnet-jwtbearer-hardened",
+      "index": {
+        "generated_at": "2026-10-25T18:39:27Z",
+        "now": 1792953567,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "dotnet-jsonwebtokenhandler-default",
+      "index": {
+        "generated_at": "2026-10-25T18:39:28Z",
+        "now": 1792953568,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "dotnet-jsonwebtokenhandler-hardened",
+      "index": {
+        "generated_at": "2026-10-25T18:39:30Z",
+        "now": 1792953570,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "node-jose-default",
+      "index": {
+        "generated_at": "2026-10-25T18:39:32Z",
+        "now": 1792953572,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    },
+    {
+      "phase": "node-jose-hardened",
+      "index": {
+        "generated_at": "2026-10-25T18:39:33Z",
+        "now": 1792953573,
+        "tokens": [
+          {
+            "id": "CTRL-01",
+            "file": "CTRL-01.jwt",
+            "category": "CTRL",
+            "expected": "accept"
+          },
+          {
+            "id": "ISS-INVALID",
+            "file": "ISS-INVALID.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "ISS-MISSING",
+            "file": "ISS-MISSING.jwt",
+            "category": "ISS",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-INVALID",
+            "file": "AUD-INVALID.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "AUD-MISSING",
+            "file": "AUD-MISSING.jwt",
+            "category": "AUD",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-EXPIRED",
+            "file": "EXP-EXPIRED.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "EXP-MISSING",
+            "file": "EXP-MISSING.jwt",
+            "category": "EXP",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-FUTURE",
+            "file": "NBF-FUTURE.jwt",
+            "category": "NBF",
+            "expected": "reject"
+          },
+          {
+            "id": "NBF-MISSING",
+            "file": "NBF-MISSING.jwt",
+            "category": "NBF",
+            "expected": "accept"
+          },
+          {
+            "id": "ALG-NONE",
+            "file": "ALG-NONE.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-UNEXPECTED",
+            "file": "ALG-UNEXPECTED.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "ALG-CONFUSION",
+            "file": "ALG-CONFUSION.jwt",
+            "category": "ALG",
+            "expected": "reject"
+          },
+          {
+            "id": "SIG-TAMPERED",
+            "file": "SIG-TAMPERED.jwt",
+            "category": "SIG",
+            "expected": "reject"
+          }
+        ]
+      },
+      "verification": "OK: CTRL-01 verifies against public.pem; 12 other tokens each differ from it in exactly one property\n  ISS-INVALID     payload.iss    signature=rs256\n  ISS-MISSING     payload.iss    signature=rs256\n  AUD-INVALID     payload.aud    signature=rs256\n  AUD-MISSING     payload.aud    signature=rs256\n  EXP-EXPIRED     payload.exp    signature=rs256\n  EXP-MISSING     payload.exp    signature=rs256\n  NBF-FUTURE      payload.nbf    signature=rs256\n  NBF-MISSING     payload.nbf    signature=rs256\n  ALG-NONE        header.alg     signature=none\n  ALG-UNEXPECTED  header.alg     signature=es256\n  ALG-CONFUSION   header.alg     signature=hs256-pem\n  SIG-TAMPERED    payload.sub    signature=stale\n"
+    }
+  ],
+  "completed": true,
+  "excluded": {
+    "node-express-jwt": "Target not implemented in this checkout"
+  },
+  "source_sha256": {
+    "policy.json": "e7c0ded6891e37ea4acad599e06766bd92535bfb3fb5b3660e7bdd7ac6208ca4",
+    "testmatrix.json": "dfd8e163bf5733a4448799ff5033a2ee79d39ef1a16996b9854b03a06f3fb2b2",
+    "generator/make_keys.py": "43bd73d1577dda310782bb79323e5282f13c10f5dc84d4ab1156669d75d4742e",
+    "generator/generate.py": "a3187dc97ed5d0f4af74711de22e4b138efa72288123db1ef6f93a79e1df7ddc",
+    "generator/verify_tokens.py": "b4cc18e91e4ecd8a227c8e06cd569f030b2b99e28267d0053a638228b8d4f881",
+    "targets/dotnet-jwtbearer/Program.cs": "f391d669dee6334339c21053443399324187b7dbf9316ce8320c98fb2baef813",
+    "targets/dotnet-jsonwebtokenhandler/Program.cs": "fbdd4c0254b69f2af1dff8e840bf6ecfbc255f5594a458b37dde7745da15861c",
+    "targets/node-jose/app.js": "902b5fd64c02d202f9d39a9bbc0d8fc1bd3dd3fa8c4ef140501ca629a7d2f287",
+    "scripts/test_targets.py": "3663d062a436e4318b8526233bb70603cf778e00fac5ef8c45448d79cbd94f93"
+  },
+  "public_key_sha256": "1199f68ef51615060fcedde9244b356b1212f10acbc1e01eaf8ca85687bacb41",
+  "prediction_mismatches": [],
+  "errors": 0,
+  "finished_at_utc": "2026-10-25T18:39:34.628839+00:00",
+  "provenance_note": "Source hashes describe file contents at measurement time, before the later naming and Git hygiene cleanup. Script path normalized to its current name; recorded hash retained."
+}
