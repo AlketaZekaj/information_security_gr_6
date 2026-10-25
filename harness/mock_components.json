@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Mock-Strict",
+    "version": "0.0.0",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 9001,
+    "target_dir": "harness",
+    "native": {"command": ["{python}", "mock_server.py", "--port", "{port}", "--behavior", "strict"], "port": 9001}
+  },
+  {
+    "name": "Mock-Lenient",
+    "version": "0.0.0",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 9002,
+    "target_dir": "harness",
+    "native": {"command": ["{python}", "mock_server.py", "--port", "{port}", "--behavior", "lenient"], "port": 9002}
+  },
+  {
+    "name": "Mock-Error",
+    "version": "0.0.0",
+    "type": "middleware",
+    "response_author": "framework",
+    "port": 9003,
+    "target_dir": "harness",
+    "native": {"command": ["{python}", "mock_server.py", "--port", "{port}", "--behavior", "error"], "port": 9003}
+  },
+  {
+    "name": "Mock-BadControl",
+    "version": "0.0.0",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 9004,
+    "target_dir": "harness",
+    "native": {"command": ["{python}", "mock_server.py", "--port", "{port}", "--behavior", "bad-control"], "port": 9004}
+  }
+]
