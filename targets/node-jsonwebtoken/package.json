@@ -1,0 +1,11 @@
+{
+  "name": "jwt-study-node-jsonwebtoken",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "jsonwebtoken": "9.0.3"
+  }
+}

@@ -142,6 +142,8 @@ python generator/make_keys.py                                  # keys/*.pem, git
 python generator/generate.py && python generator/verify_tokens.py
 ```
 
+`verify_tokens.py` fails with a message naming the token and the property if any token differs from `CTRL-01` in more or fewer properties than its row promises, or if `CTRL-01` does not verify against `keys/public.pem`.
+
 ### Running a target
 
 Same pattern for every target (the example is PyJWT on host port 8001; jsonwebtoken is 8003). Regenerate the tokens first.
@@ -153,5 +155,3 @@ docker run -d --rm --name pyjwt -p 8001:8080 -e CONFIG_MODE=default \
 python generator/check_target.py http://localhost:8001
 docker stop pyjwt
 ```
-
-`verify_tokens.py` fails with a message naming the token and the property if any token differs from `CTRL-01` in more or fewer properties than its row promises, or if `CTRL-01` does not verify against `keys/public.pem`.
