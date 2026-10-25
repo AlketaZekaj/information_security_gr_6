@@ -1,28 +1,19 @@
-# .NET pilot observations — 25 October 2026
+# .NET pilot observations — expanded matrix, 25 October 2026
 
-Full evidence and reproduction commands: [target validation report](target-validation/REPORT.md).
+Full evidence: [target validation report](target-validation/REPORT.md).
 
-- JwtBearer 8.0.8 (IdentityModel 7.1.2) and JsonWebTokenHandler 8.19.1 each
-  matched all 13 main cases in default and hardened modes. Both control gates
-  passed, and every rejection returned 401. No server/transport errors occurred.
-- Default .NET accepted a token expired by 120 seconds and a same-key RS512
-  token. Hardened rejected both. Main-matrix perfection does not demonstrate
-  zero clock skew or RS256-only enforcement.
-- EXP-EXPIRED has nbf later than exp and triggered invalid-lifetime diagnostics.
-  A separate chronologically valid token expired by one hour triggered expiry
-  rejection in both modes. Coordinate a generator/verifier input correction
-  before the main study.
-- Hardened adds eight parameter assignments: five restate defaults; three
-  change parameter values. Two showed an acceptance effect in the probes.
-  ValidateIssuerSigningKey changes value but showed no acceptance effect for
-  the raw RSA keys; signature verification already operates in default mode.
-- JwtBearer's native 401 carries WWW-Authenticate. The manual handler's wrapper
-  supplies an empty 401 and X-Reject-Reason. Preserve both kinds of evidence.
-- Versions differ between targets, so this is not a same-version middleware
-  comparison. Measurements were native Windows because Docker failed to start.
-- The main coverage definition is still inconsistent: CONTRACT.md proposes
-  eleven invalid cases, while the task split defines seven requirement groups.
-  Resolve that definition and the algorithm-coverage caveat before aggregation.
-
-The main matrix and probes are stored separately. These pilot rows must not be
-mixed with the eventual main experiment. express-jwt is still unimplemented.
+- Both .NET targets now match 13/15 expectations in default mode and 15/15 in
+  hardened mode. Default accepts 2 of the 13 invalid tokens; hardened accepts 0.
+- EXP-SKEW-120 and ALG-RS512 are part of the shared main matrix for every target.
+  The former tests zero skew, the latter RS256-only policy with the same RSA key.
+- All control and NBF-MISSING cases passed. All rejections were 401; no errors occurred.
+- Base iat/nbf are now two hours ago. EXP-EXPIRED changes only exp and now produces
+  expiration diagnostics in both modes, fixing the old invalid-lifetime confound.
+- Eight explicit hardened assignments include five restated defaults. Of the three
+  changed values, ClockSkew and ValidAlgorithms show acceptance changes directly
+  in the main matrix. No acceptance effect was demonstrated for additional RSA
+  signing-key validation; cryptographic signature checks already operate by default.
+- JwtBearer 8.0.8 uses IdentityModel 7.1.2, while the manual handler uses 8.19.1.
+  This is not a controlled same-version middleware-versus-library comparison.
+- Native Windows execution was used. Container/clean-machine validation remains pending.
+- Old 13-case results are historical and must not be combined with the new 15-case data.

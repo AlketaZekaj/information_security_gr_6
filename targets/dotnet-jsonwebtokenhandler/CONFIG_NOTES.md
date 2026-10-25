@@ -11,8 +11,8 @@ explicitly set in that branch. Those three supplied values are baseline setup.
 
 Tested 2026-10-25: **IdentityModel.JsonWebTokens/Tokens 8.19.1; SDK 10.0.402; runtime 10.0.13**, native Windows. Both modes accepted CTRL-01.
 See [full report](../../results/pilot/target-validation/REPORT.md),
-[raw follow-up results](../../results/pilot/target-validation/followup/raw.csv), and
-[pre-run predictions](../../results/pilot/target-validation/PREDICTIONS.md).
+[raw 15-case results](../../results/pilot/target-validation/expanded-matrix/raw.csv), and
+[pre-run predictions](../../results/pilot/target-validation/expanded-matrix/PREDICTIONS.md).
 Container execution is untested because Docker Desktop failed to start.
 
 The effective defaults were checked against the
@@ -28,19 +28,18 @@ on 2026-10-25 and compared with HTTP measurements.
 | ValidAudience | explicit policy value | same | no delta | Baseline expected audience. |
 | ValidateIssuer | implicit true | explicit true | no | Restates default; wrong/missing issuer rejected in both. |
 | ValidateAudience | implicit true | explicit true | no | Restates default; wrong/missing audience rejected in both. |
-| ValidateLifetime | implicit true | explicit true | no | Restates default; chronological expired probe rejects in both. |
+| ValidateLifetime | implicit true | explicit true | no | Restates default; chronological expired case rejects in both. |
 | ValidateIssuerSigningKey | implicit false | explicit true | value changes; no acceptance delta observed | Additional key validation, separate from verifying the JWT signature. |
 | RequireSignedTokens | implicit true | explicit true | no | Restates default. |
 | RequireExpirationTime | implicit true | explicit true | no | Restates default; EXP-MISSING rejected in both. |
-| ValidAlgorithms | unset | [RS256] | yes, demonstrated by RS512 probe | Default accepts same-key RS512; hardened rejects. |
-| ClockSkew | implicit 300 seconds | explicit zero | yes, demonstrated by 120-second expiry probe | Removes clock tolerance. |
+| ValidAlgorithms | unset | [RS256] | yes, demonstrated by ALG-RS512 | Default accepts same-key RS512; hardened rejects. |
+| ClockSkew | implicit 300 seconds | explicit zero | yes, demonstrated by EXP-SKEW-120 | Removes clock tolerance. |
 
 Eight assignments in the hardened branch: five restate defaults; three change
-effective parameter values. Of those three, two change acceptance in the
-diagnostic probes. No assignment changes acceptance in the original 13-case
-matrix. The effect of ValidateIssuerSigningKey on other key types was not tested.
-Signature verification occurs in both modes: SIG-TAMPERED returns 401.
-nbf remains optional; NBF-MISSING returns 200.
+effective parameter values. Two change acceptance in the expanded main matrix:
+ValidAlgorithms and ClockSkew. ValidateIssuerSigningKey changes value but showed
+no acceptance effect with the raw RSA keys. Signature verification operates in
+both modes. nbf remains optional; NBF-MISSING returns 200.
 
 ## Predicted versus measured
 
@@ -52,30 +51,32 @@ nbf remains optional; NBF-MISSING returns 200.
 | AUD-INVALID | reject | reject (401) | reject | reject (401) |
 | AUD-MISSING | reject | reject (401) | reject | reject (401) |
 | EXP-EXPIRED | reject | reject (401) | reject | reject (401) |
+| EXP-SKEW-120 | accept | accept (200) | reject | reject (401) |
 | EXP-MISSING | reject | reject (401) | reject | reject (401) |
 | NBF-FUTURE | reject | reject (401) | reject | reject (401) |
 | NBF-MISSING | accept | accept (200) | accept | accept (200) |
 | ALG-NONE | reject | reject (401) | reject | reject (401) |
 | ALG-UNEXPECTED | reject | reject (401) | reject | reject (401) |
+| ALG-RS512 | accept | accept (200) | reject | reject (401) |
 | ALG-CONFUSION | reject | reject (401) | reject | reject (401) |
 | SIG-TAMPERED | reject | reject (401) | reject | reject (401) |
 
-All acceptance predictions matched. Both modes have 0/11 false accepts, 0/2
-false rejects, and zero errors in the main matrix. This describes the selected
-cases, not complete enforcement of the stricter policy by default.
+All acceptance predictions matched. On the current 15-case matrix, default has
+2/13 false accepts (15.38%), 0/2 false rejects, and zero errors. Hardened has
+0/13 false accepts, 0/2 false rejects, and zero errors. These predictions were
+informed by the earlier pilot and its probes, not an independent first run.
 
-## Diagnostic findings
+## Main-matrix findings
 
 - EXP-SKEW-120: 200 default, 401 hardened. Clock tolerance affects acceptance.
-- ALG-RS512: 200 default, 401 hardened. ES256 rejection alone does not establish
-  RS256-only enforcement; the same RSA key can verify RS512 in default mode.
-- EXP-EXPIRED returns an invalid-lifetime diagnostic because nbf is later than
-  exp. The separate, chronologically valid EXP-PAST-3600 probe returns 401 with
-  an expired-token diagnostic in both modes. Keep this test-design limitation
-  visible when reporting expiry coverage.
+- ALG-RS512: 200 default, 401 hardened. The same RSA key verifies RS512 by default;
+  the hardened RS256-only list rejects it.
+- EXP-EXPIRED: 401 with an expiration diagnostic in both modes. The revised base
+  iat/nbf are two hours ago, removing the earlier invalid-interval confound.
+- Both new cases now count in raw.csv and summary.csv. They are not separate probes.
 
-See [probe rows](../../results/pilot/target-validation/followup/probes.csv) and
-[complete headers](../../results/pilot/target-validation/followup/diagnostics.json).
+See [matrix rows](../../results/pilot/target-validation/expanded-matrix/raw.csv) and
+[complete headers](../../results/pilot/target-validation/expanded-matrix/diagnostics.json).
 
 ## Response and interpretation limits
 

@@ -2,7 +2,7 @@
   {
     "id": "CTRL-01",
     "category": "CTRL",
-    "description": "Valid control token: RS256, iss/aud from policy.json, nbf = now - 60, exp = now + 3600.",
+    "description": "Valid control token: RS256, iss/aud from policy.json, iat and nbf = now - 7200, exp = now + 3600.",
     "changed_property": "none",
     "expected": "accept",
     "requirement": "A correctly signed token that satisfies the policy is accepted (setup check, not a requirement)"
@@ -48,6 +48,14 @@
     "requirement": "an expired token must be rejected"
   },
   {
+    "id": "EXP-SKEW-120",
+    "category": "EXP",
+    "description": "exp = now - 120 (two minutes expired). Tests the zero-clock-skew policy; the unchanged iat/nbf precede exp.",
+    "changed_property": "payload.exp",
+    "expected": "reject",
+    "requirement": "expired tokens must be rejected with policy.clock_skew_seconds = 0, even within a library's default tolerance"
+  },
+  {
     "id": "EXP-MISSING",
     "category": "EXP",
     "description": "exp claim removed.",
@@ -86,6 +94,14 @@
     "changed_property": "header.alg (signed with EC key)",
     "expected": "reject",
     "requirement": "only policy.allowed_algorithms (RS256) are accepted"
+  },
+  {
+    "id": "ALG-RS512",
+    "category": "ALG",
+    "description": "Header alg is RS512; signed with SHA-512 using the same RSA private key as CTRL-01. Tests the RS256-only allow-list without a key-type mismatch.",
+    "changed_property": "header.alg (re-signed with the same RSA key using SHA-512)",
+    "expected": "reject",
+    "requirement": "only policy.allowed_algorithms (RS256) are accepted, including when another algorithm uses the same key type"
   },
   {
     "id": "ALG-CONFUSION",

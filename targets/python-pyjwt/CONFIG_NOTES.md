@@ -1,5 +1,11 @@
 # PyJWT configuration notes
 
+> Matrix update (25 October 2026): the shared suite now has 15 cases, including
+> EXP-SKEW-120 and ALG-RS512. The results below describe the earlier 13-case run;
+> this target has not been rerun against the revised suite in this update.
+> Use the shared generator and check_target.py to run all 15 cases. Do not
+> present the older rates below as results for the expanded matrix.
+
 | | |
 |---|---|
 | Component | PyJWT `2.15.1` (pinned in `requirements.txt`), `cryptography` `50.0.2` |

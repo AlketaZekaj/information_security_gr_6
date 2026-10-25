@@ -48,7 +48,7 @@ def load_private(path):
 
 
 class Signers:
-    """The four ways a token's signature part is produced."""
+    """Signing methods for the control and adversarial test cases."""
 
     def __init__(self, keys_dir):
         for name in ("private.pem", "public.pem", "ec_private.pem"):
@@ -61,6 +61,9 @@ class Signers:
 
     def rs256(self, signing_input: bytes) -> bytes:
         return self.rsa_key.sign(signing_input, padding.PKCS1v15(), hashes.SHA256())
+
+    def rs512(self, signing_input: bytes) -> bytes:
+        return self.rsa_key.sign(signing_input, padding.PKCS1v15(), hashes.SHA512())
 
     def es256(self, signing_input: bytes) -> bytes:
         # JWS wants raw r || s (32 bytes each), not the DER encoding cryptography returns.
@@ -88,8 +91,9 @@ def build_cases(policy, now, signers):
         "iss": policy["issuer"],
         "aud": policy["audience"],
         "sub": SUBJECT,
-        "iat": now,
-        "nbf": now - 60,
+        # Both expired variants must keep iat/nbf before exp while changing only exp.
+        "iat": now - 2 * HOUR,
+        "nbf": now - 2 * HOUR,
         "exp": now + HOUR,
     }
     control_signature = signers.rs256(
@@ -118,11 +122,13 @@ def build_cases(policy, now, signers):
         "AUD-INVALID": (claim("aud", OTHER_AUDIENCE), signers.rs256),
         "AUD-MISSING": (remove("aud"), signers.rs256),
         "EXP-EXPIRED": (claim("exp", now - HOUR), signers.rs256),
+        "EXP-SKEW-120": (claim("exp", now - 120), signers.rs256),
         "EXP-MISSING": (remove("exp"), signers.rs256),
         "NBF-FUTURE": (claim("nbf", now + HOUR), signers.rs256),
         "NBF-MISSING": (remove("nbf"), signers.rs256),
         "ALG-NONE": (alg("none"), signers.none),
         "ALG-UNEXPECTED": (alg("ES256"), signers.es256),
+        "ALG-RS512": (alg("RS512"), signers.rs512),
         "ALG-CONFUSION": (alg("HS256"), signers.hs256_public_pem),
         # Payload edited after signing: the control signature is reattached unchanged.
         "SIG-TAMPERED": (claim("sub", TAMPERED_SUBJECT), lambda _signing_input: control_signature),

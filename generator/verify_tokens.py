@@ -9,6 +9,7 @@ The signature is not counted as a property of its own: it is derived from the he
 payload and key. RULES therefore also states how each token's signature must look:
 
   rs256     claim cases: re-signed with the RSA key, so the signature is valid
+  rs512     ALG-RS512: same RSA key, SHA-512 signature
   none      ALG-NONE: empty signature part
   es256     ALG-UNEXPECTED: signed with the EC key, verifies with ec_public.pem
   hs256-pem ALG-CONFUSION: HMAC-SHA256 keyed with the bytes of public.pem
@@ -46,12 +47,14 @@ RULES = {
     "ISS-MISSING": Rule("payload.iss", MISSING, "rs256"),
     "AUD-INVALID": Rule("payload.aud", "other-api", "rs256"),
     "AUD-MISSING": Rule("payload.aud", MISSING, "rs256"),
-    "EXP-EXPIRED": Rule("payload.exp", lambda c: c["payload.iat"] - HOUR, "rs256"),
+    "EXP-EXPIRED": Rule("payload.exp", lambda now: now - HOUR, "rs256"),
+    "EXP-SKEW-120": Rule("payload.exp", lambda now: now - 120, "rs256"),
     "EXP-MISSING": Rule("payload.exp", MISSING, "rs256"),
-    "NBF-FUTURE": Rule("payload.nbf", lambda c: c["payload.iat"] + HOUR, "rs256"),
+    "NBF-FUTURE": Rule("payload.nbf", lambda now: now + HOUR, "rs256"),
     "NBF-MISSING": Rule("payload.nbf", MISSING, "rs256"),
     "ALG-NONE": Rule("header.alg", "none", "none"),
     "ALG-UNEXPECTED": Rule("header.alg", "ES256", "es256"),
+    "ALG-RS512": Rule("header.alg", "RS512", "rs512"),
     "ALG-CONFUSION": Rule("header.alg", "HS256", "hs256-pem"),
     "SIG-TAMPERED": Rule("payload.sub", "admin", "stale"),
 }
@@ -81,9 +84,9 @@ class Token:
         return props
 
 
-def rsa_verifies(public_key, token):
+def rsa_verifies(public_key, token, digest=None):
     try:
-        public_key.verify(token.signature, token.signing_input, padding.PKCS1v15(), hashes.SHA256())
+        public_key.verify(token.signature, token.signing_input, padding.PKCS1v15(), digest or hashes.SHA256())
         return True
     except InvalidSignature:
         return False
@@ -135,17 +138,18 @@ def main():
         fail("CTRL-01", "control token missing; cannot compare the others")
     else:
         c = control.properties()
-        now = c.get("payload.iat")
+        now = index.get("now")
+        if type(now) is not int:
+            print("FAIL index: now must be an integer generation timestamp")
+            return 1
         expected_control = {
             "header.alg": "RS256", "header.typ": "JWT",
             "payload.iss": policy["issuer"], "payload.aud": policy["audience"],
-            "payload.sub": "test-user", "payload.iat": now,
-            "payload.nbf": (now or 0) - 60, "payload.exp": (now or 0) + HOUR,
+            "payload.sub": "test-user", "payload.iat": now - 2 * HOUR,
+            "payload.nbf": now - 2 * HOUR, "payload.exp": now + HOUR,
         }
         if c != expected_control:
             fail("CTRL-01", f"unexpected header/claims: {c} (expected {expected_control})")
-        if not isinstance(now, int) or now != index["now"]:
-            fail("CTRL-01", f"payload.iat ({now}) does not match index.json now ({index['now']})")
         if not rsa_verifies(rsa_public, control):
             fail("CTRL-01", "signature does not verify against keys/public.pem")
 
@@ -158,13 +162,15 @@ def main():
             if changed != [rule.prop]:
                 fail(case_id, f"expected only {rule.prop} to differ from CTRL-01, but differing properties are {changed}")
                 continue
-            want = rule.value(c) if callable(rule.value) else rule.value
+            want = rule.value(now) if callable(rule.value) else rule.value
             got = props.get(rule.prop, MISSING)
             if got != want:
                 fail(case_id, f"{rule.prop} is {got!r}, expected {'absent' if want is MISSING else repr(want)}")
 
             if rule.signature == "rs256" and not rsa_verifies(rsa_public, token):
                 fail(case_id, "signature must verify against keys/public.pem")
+            elif rule.signature == "rs512" and not rsa_verifies(rsa_public, token, hashes.SHA512()):
+                fail(case_id, "signature must verify against the same keys/public.pem using SHA-512")
             elif rule.signature == "none" and not (token.signature == b"" and token.ends_with_dot):
                 fail(case_id, "signature part must be empty (token ends with '.')")
             elif rule.signature == "es256" and not es256_verifies(ec_public, token):
@@ -178,6 +184,10 @@ def main():
                     fail(case_id, "signature must be the unchanged CTRL-01 signature")
                 if rsa_verifies(rsa_public, token):
                     fail(case_id, "tampered token still verifies; the edit did not invalidate the signature")
+
+            if case_id in ("EXP-EXPIRED", "EXP-SKEW-120"):
+                if not token.payload["iat"] <= token.payload["nbf"] < token.payload["exp"] < now:
+                    fail(case_id, "expiry case must have iat <= nbf < exp < generation time")
 
     if failures:
         print("\n".join(failures))

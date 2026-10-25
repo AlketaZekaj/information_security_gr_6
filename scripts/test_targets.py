@@ -7,7 +7,6 @@ Uses port 8080 sequentially. Only processes started by this script are stopped.
 """
 import argparse
 import contextlib
-import copy
 import csv
 import hashlib
 import json
@@ -23,10 +22,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "generator"))
-from generate import Signers, assemble
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.asymmetric import padding
 
 FIELDS = "component version config test_id category expected actual_status accepted correct latency_ms response_body www_authenticate".split()
 TARGETS = ["dotnet-jwtbearer", "dotnet-jsonwebtokenhandler", "node-jose"]
@@ -145,30 +140,11 @@ def observation(component, version, mode, case, token):
     return row, detail
 
 
-def diagnostic_tokens():
-    import base64
-    control = (ROOT / "tokens/CTRL-01.jwt").read_text().split(".")
-    header = json.loads(base64.urlsafe_b64decode(control[0] + "=" * (-len(control[0]) % 4)))
-    payload = json.loads(base64.urlsafe_b64decode(control[1] + "=" * (-len(control[1]) % 4)))
-    signers = Signers(ROOT / "keys")
-    old = copy.deepcopy(payload)
-    # Keep the validity interval well formed; this probe is outside the one-change matrix.
-    old.update(iat=payload["iat"] - 600, nbf=payload["iat"] - 600, exp=payload["iat"] - 120)
-    long_expired = copy.deepcopy(payload)
-    long_expired.update(iat=payload["iat"] - 7200, nbf=payload["iat"] - 7200, exp=payload["iat"] - 3600)
-    other_alg = dict(header, alg="RS512")
-    return {
-        "EXP-SKEW-120": assemble(header, old, signers.rs256),
-        "EXP-PAST-3600": assemble(header, long_expired, signers.rs256),
-        "ALG-RS512": assemble(other_alg, payload, lambda data: signers.rsa_key.sign(data, padding.PKCS1v15(), hashes.SHA512())),
-    }
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dotnet8", default="dotnet")
     parser.add_argument("--dotnet10", default=str(ROOT / ".tools/dotnet/dotnet.exe"))
-    parser.add_argument("--output", default="results/pilot/target-validation")
+    parser.add_argument("--output", default="results/pilot/target-validation/expanded-matrix")
     parser.add_argument("--skip-build", action="store_true")
     args = parser.parse_args()
     out = ROOT / args.output
@@ -180,7 +156,7 @@ def main():
                 "base_commit": command(["git", "rev-parse", "HEAD"]).strip(),
                 "components": {}, "gates": [], "token_generations": [], "completed": False,
                 "excluded": {"node-express-jwt": "Target not implemented in this checkout"}}
-    rows, diagnostics, extras = [], [], []
+    rows, diagnostics = [], []
     try:
         invocations, versions = {}, {}
         for component in TARGETS:
@@ -213,6 +189,7 @@ def main():
                                                *[ROOT / "targets" / c / ("app.js" if c == "node-jose" else "Program.cs") for c in TARGETS]]}
         metadata["public_key_sha256"] = hashlib.sha256((ROOT / "keys/public.pem").read_bytes()).hexdigest()
         matrix = json.loads((ROOT / "testmatrix.json").read_text())
+        metadata["test_matrix"] = matrix
         control = next(c for c in matrix if c["id"] == "CTRL-01")
 
         def generate(phase):
@@ -248,13 +225,8 @@ def main():
                         row, detail = observation(component, versions[component], mode, case, (ROOT / "tokens" / f"{case['id']}.jwt").read_text())
                         rows.append(row)
                         diagnostics.append(detail)
-                    for case_id, token in diagnostic_tokens().items():
-                        case = {"id": case_id, "category": "PROBE", "expected": "reject"}
-                        row, detail = observation(component, versions[component], mode, case, token)
-                        extras.append(row)
-                        diagnostics.append(detail)
                 subset = [r for r in rows if r["component"] == component and r["config"] == mode]
-                print(f"Measured {component}/{mode}: {sum(r['correct'] == 'true' for r in subset)}/13 match policy", flush=True)
+                print(f"Measured {component}/{mode}: {sum(r['correct'] == 'true' for r in subset)}/{len(matrix)} match policy", flush=True)
         summaries = []
         for component in TARGETS:
             for mode in MODES:
@@ -273,14 +245,13 @@ def main():
         write_csv(out / "summary.csv", summaries, list(summaries[0]))
         metadata["completed"] = True
         metadata["prediction_mismatches"] = [d for d in diagnostics if not d["matches_prediction"]]
-        metadata["errors"] = sum(r["accepted"] == "error" for r in rows + extras)
+        metadata["errors"] = sum(r["accepted"] == "error" for r in rows)
     except Exception as error:
         metadata["failure"] = str(error)
         raise
     finally:
         metadata["finished_at_utc"] = utc()
         write_csv(out / "raw.csv", rows)
-        write_csv(out / "probes.csv", extras)
         dump(out / "diagnostics.json", diagnostics)
         dump(out / "run.json", metadata)
     return 2 if metadata["errors"] or metadata["prediction_mismatches"] else 0

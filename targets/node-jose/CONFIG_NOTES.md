@@ -13,8 +13,8 @@ Both modes accepted CTRL-01. This run used the existing installed dependencies;
 it did not test npm ci or the Node 22.20.0 Docker image.
 
 See [full report](../../results/pilot/target-validation/REPORT.md),
-[raw follow-up results](../../results/pilot/target-validation/followup/raw.csv), and
-[pre-run predictions](../../results/pilot/target-validation/PREDICTIONS.md).
+[raw 15-case results](../../results/pilot/target-validation/expanded-matrix/raw.csv), and
+[pre-run predictions](../../results/pilot/target-validation/expanded-matrix/PREDICTIONS.md).
 
 ## Configuration changes
 
@@ -25,7 +25,7 @@ See [full report](../../results/pilot/target-validation/REPORT.md),
 | issuer | omitted | policy issuer | yes | Wrong/missing issuer changes 200 to 401. |
 | audience | omitted | policy audience | yes | Wrong/missing audience changes 200 to 401. |
 | requiredClaims: ['iss','aud','exp'] | omitted | explicit | yes | Missing exp changes 200 to 401. Issuer/audience options also imply presence of their claims. |
-| clockTolerance: 0 | implicit zero | explicit zero | no | Restates the default; 120-second-expired probe rejects in both. |
+| clockTolerance: 0 | implicit zero | explicit zero | no | Restates the default; 120-second-expired case rejects in both. |
 
 Five hardened settings, three with an observed acceptance effect in this setup.
 This is not a claim that algorithm allow-lists are unnecessary for other key
@@ -41,27 +41,30 @@ representations or algorithms.
 | AUD-INVALID | accept | accept (200) | reject | reject (401) |
 | AUD-MISSING | accept | accept (200) | reject | reject (401) |
 | EXP-EXPIRED | reject | reject (401) | reject | reject (401) |
+| EXP-SKEW-120 | reject | reject (401) | reject | reject (401) |
 | EXP-MISSING | accept | accept (200) | reject | reject (401) |
 | NBF-FUTURE | reject | reject (401) | reject | reject (401) |
 | NBF-MISSING | accept | accept (200) | accept | accept (200) |
 | ALG-NONE | reject | reject (401) | reject | reject (401) |
 | ALG-UNEXPECTED | reject | reject (401) | reject | reject (401) |
+| ALG-RS512 | reject | reject (401) | reject | reject (401) |
 | ALG-CONFUSION | reject | reject (401) | reject | reject (401) |
 | SIG-TAMPERED | reject | reject (401) | reject | reject (401) |
 
-All acceptance predictions matched. Default: 5/11 false accepts (45.45%),
-0/2 false rejects, zero errors. Hardened: 0/11 false accepts, 0/2 false rejects,
-zero errors. The five changes are ISS-INVALID, ISS-MISSING, AUD-INVALID,
-AUD-MISSING and EXP-MISSING. nbf is validated when present and stays optional.
+All acceptance predictions matched. On the current 15-case matrix, default has
+5/13 false accepts (38.46%), 0/2 false rejects, and zero errors. Hardened has
+0/13 false accepts, 0/2 false rejects, and zero errors. The same five default gaps
+remain: ISS-INVALID, ISS-MISSING, AUD-INVALID, AUD-MISSING and EXP-MISSING.
+The changed percentage reflects the enlarged denominator, not a target-code change.
 
-## Diagnostic findings
+## Main-matrix findings
 
-- EXP-SKEW-120 and EXP-PAST-3600: 401 in both modes, ERR_JWT_EXPIRED.
-- ALG-RS512: 401 in both modes. Default exposes TypeError from the imported
-  CryptoKey/algorithm mismatch; hardened exposes ERR_JOSE_ALG_NOT_ALLOWED.
-- The original EXP-EXPIRED token has nbf later than exp. jose reports expiration,
-  whereas .NET reports the invalid interval. This is a limitation of comparing
-  validation reasons using that input, documented in the shared pilot report.
+- EXP-SKEW-120 and EXP-EXPIRED return 401 in both modes, with ERR_JWT_EXPIRED.
+- ALG-RS512 returns 401 in both modes. Default exposes TypeError from the
+  imported CryptoKey/algorithm mismatch; hardened exposes ERR_JOSE_ALG_NOT_ALLOWED.
+- These cases are included in the main raw results and metric denominators.
+- The base iat/nbf now precede both expired values, resolving the earlier
+  invalid-interval confound without changing more than one property per case.
 
 ## Responses and source verification
 
