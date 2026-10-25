@@ -1,0 +1,79 @@
+component,version,config,test_id,category,expected,actual_status,accepted,correct,latency_ms,response_body,www_authenticate
+dotnet-jwtbearer,8.0.8,default,CTRL-01,CTRL,accept,200,true,true,59.16020006407052,"""ok""",
+dotnet-jwtbearer,8.0.8,default,ISS-INVALID,ISS,reject,401,false,true,24.66760005336255,,"Bearer error=""invalid_token"", error_description=""The issuer 'https://evil.example.test' is invalid"""
+dotnet-jwtbearer,8.0.8,default,ISS-MISSING,ISS,reject,401,false,true,3.6954000825062394,,"Bearer error=""invalid_token"", error_description=""The issuer '' is invalid"""
+dotnet-jwtbearer,8.0.8,default,AUD-INVALID,AUD,reject,401,false,true,2.7677000034600496,,"Bearer error=""invalid_token"", error_description=""The audience 'other-api' is invalid"""
+dotnet-jwtbearer,8.0.8,default,AUD-MISSING,AUD,reject,401,false,true,21.79150003939867,,"Bearer error=""invalid_token"", error_description=""The audience 'empty' is invalid"""
+dotnet-jwtbearer,8.0.8,default,EXP-EXPIRED,EXP,reject,401,false,true,7.55630002822727,,"Bearer error=""invalid_token"", error_description=""The token lifetime is invalid; NotBefore: '10/25/2026 18:37:22', Expires: '10/25/2026 17:38:22'"""
+dotnet-jwtbearer,8.0.8,default,EXP-MISSING,EXP,reject,401,false,true,2.5649000890552998,,"Bearer error=""invalid_token"", error_description=""The token has no expiration"""
+dotnet-jwtbearer,8.0.8,default,NBF-FUTURE,NBF,reject,401,false,true,2.0372000290080905,,"Bearer error=""invalid_token"", error_description=""The token is not valid before '10/25/2026 19:38:22'"""
+dotnet-jwtbearer,8.0.8,default,NBF-MISSING,NBF,accept,200,true,true,1.7993999645113945,"""ok""",
+dotnet-jwtbearer,8.0.8,default,ALG-NONE,ALG,reject,401,false,true,13.558800099417567,,"Bearer error=""invalid_token"", error_description=""The signature is invalid"""
+dotnet-jwtbearer,8.0.8,default,ALG-UNEXPECTED,ALG,reject,401,false,true,14.689299976453185,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jwtbearer,8.0.8,default,ALG-CONFUSION,ALG,reject,401,false,true,1.6135999467223883,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jwtbearer,8.0.8,default,SIG-TAMPERED,SIG,reject,401,false,true,2.434200025163591,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jwtbearer,8.0.8,hardened,CTRL-01,CTRL,accept,200,true,true,59.516899986192584,"""ok""",
+dotnet-jwtbearer,8.0.8,hardened,ISS-INVALID,ISS,reject,401,false,true,23.223299998790026,,"Bearer error=""invalid_token"", error_description=""The issuer 'https://evil.example.test' is invalid"""
+dotnet-jwtbearer,8.0.8,hardened,ISS-MISSING,ISS,reject,401,false,true,3.069800091907382,,"Bearer error=""invalid_token"", error_description=""The issuer '' is invalid"""
+dotnet-jwtbearer,8.0.8,hardened,AUD-INVALID,AUD,reject,401,false,true,2.0097000524401665,,"Bearer error=""invalid_token"", error_description=""The audience 'other-api' is invalid"""
+dotnet-jwtbearer,8.0.8,hardened,AUD-MISSING,AUD,reject,401,false,true,2.8565999818965793,,"Bearer error=""invalid_token"", error_description=""The audience 'empty' is invalid"""
+dotnet-jwtbearer,8.0.8,hardened,EXP-EXPIRED,EXP,reject,401,false,true,24.401700007729232,,"Bearer error=""invalid_token"", error_description=""The token lifetime is invalid; NotBefore: '10/25/2026 18:37:24', Expires: '10/25/2026 17:38:24'"""
+dotnet-jwtbearer,8.0.8,hardened,EXP-MISSING,EXP,reject,401,false,true,1.9403999904170632,,"Bearer error=""invalid_token"", error_description=""The token has no expiration"""
+dotnet-jwtbearer,8.0.8,hardened,NBF-FUTURE,NBF,reject,401,false,true,1.8085000338032842,,"Bearer error=""invalid_token"", error_description=""The token is not valid before '10/25/2026 19:38:24'"""
+dotnet-jwtbearer,8.0.8,hardened,NBF-MISSING,NBF,accept,200,true,true,1.4224000042304397,"""ok""",
+dotnet-jwtbearer,8.0.8,hardened,ALG-NONE,ALG,reject,401,false,true,1.56770006287843,,"Bearer error=""invalid_token"", error_description=""The signature is invalid"""
+dotnet-jwtbearer,8.0.8,hardened,ALG-UNEXPECTED,ALG,reject,401,false,true,1.6536000184714794,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jwtbearer,8.0.8,hardened,ALG-CONFUSION,ALG,reject,401,false,true,1.5112999826669693,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jwtbearer,8.0.8,hardened,SIG-TAMPERED,SIG,reject,401,false,true,13.193299993872643,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jsonwebtokenhandler,8.19.1,default,CTRL-01,CTRL,accept,200,true,true,61.67660001665354,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,default,ISS-INVALID,ISS,reject,401,false,true,7.661900017410517,,
+dotnet-jsonwebtokenhandler,8.19.1,default,ISS-MISSING,ISS,reject,401,false,true,1.8351000035181642,,
+dotnet-jsonwebtokenhandler,8.19.1,default,AUD-INVALID,AUD,reject,401,false,true,1.6994000179693103,,
+dotnet-jsonwebtokenhandler,8.19.1,default,AUD-MISSING,AUD,reject,401,false,true,1.9703999860212207,,
+dotnet-jsonwebtokenhandler,8.19.1,default,EXP-EXPIRED,EXP,reject,401,false,true,7.034000009298325,,
+dotnet-jsonwebtokenhandler,8.19.1,default,EXP-MISSING,EXP,reject,401,false,true,1.8726999405771494,,
+dotnet-jsonwebtokenhandler,8.19.1,default,NBF-FUTURE,NBF,reject,401,false,true,1.6739999409765005,,
+dotnet-jsonwebtokenhandler,8.19.1,default,NBF-MISSING,NBF,accept,200,true,true,1.2586000375449657,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,default,ALG-NONE,ALG,reject,401,false,true,13.323500053957105,,
+dotnet-jsonwebtokenhandler,8.19.1,default,ALG-UNEXPECTED,ALG,reject,401,false,true,1.880299998447299,,
+dotnet-jsonwebtokenhandler,8.19.1,default,ALG-CONFUSION,ALG,reject,401,false,true,1.358299981802702,,
+dotnet-jsonwebtokenhandler,8.19.1,default,SIG-TAMPERED,SIG,reject,401,false,true,1.187399961054325,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,CTRL-01,CTRL,accept,200,true,true,69.27199999336153,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ISS-INVALID,ISS,reject,401,false,true,9.218999999575317,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ISS-MISSING,ISS,reject,401,false,true,23.89509999193251,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,AUD-INVALID,AUD,reject,401,false,true,15.672300010919571,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,AUD-MISSING,AUD,reject,401,false,true,1.8085999181494117,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,EXP-EXPIRED,EXP,reject,401,false,true,6.8651000037789345,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,EXP-MISSING,EXP,reject,401,false,true,1.5521000605076551,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,NBF-FUTURE,NBF,reject,401,false,true,1.4650000957772136,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,NBF-MISSING,NBF,accept,200,true,true,1.9946000538766384,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ALG-NONE,ALG,reject,401,false,true,1.8895999528467655,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ALG-UNEXPECTED,ALG,reject,401,false,true,1.6898000612854958,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ALG-CONFUSION,ALG,reject,401,false,true,1.250099972821772,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,SIG-TAMPERED,SIG,reject,401,false,true,1.146599999628961,,
+node-jose,6.2.13,default,CTRL-01,CTRL,accept,200,true,true,9.1905000153929,ok,
+node-jose,6.2.13,default,ISS-INVALID,ISS,reject,200,true,false,3.268499975092709,ok,
+node-jose,6.2.13,default,ISS-MISSING,ISS,reject,200,true,false,21.536799962632358,ok,
+node-jose,6.2.13,default,AUD-INVALID,AUD,reject,200,true,false,3.6536999978125095,ok,
+node-jose,6.2.13,default,AUD-MISSING,AUD,reject,200,true,false,2.986700041219592,ok,
+node-jose,6.2.13,default,EXP-EXPIRED,EXP,reject,401,false,true,3.5644000163301826,unauthorized,
+node-jose,6.2.13,default,EXP-MISSING,EXP,reject,200,true,false,2.522399998269975,ok,
+node-jose,6.2.13,default,NBF-FUTURE,NBF,reject,401,false,true,15.24740003515035,unauthorized,
+node-jose,6.2.13,default,NBF-MISSING,NBF,accept,200,true,true,2.9235000256448984,ok,
+node-jose,6.2.13,default,ALG-NONE,ALG,reject,401,false,true,3.2236999832093716,unauthorized,
+node-jose,6.2.13,default,ALG-UNEXPECTED,ALG,reject,401,false,true,2.0256000570952892,unauthorized,
+node-jose,6.2.13,default,ALG-CONFUSION,ALG,reject,401,false,true,20.272699999623,unauthorized,
+node-jose,6.2.13,default,SIG-TAMPERED,SIG,reject,401,false,true,2.384499995969236,unauthorized,
+node-jose,6.2.13,hardened,CTRL-01,CTRL,accept,200,true,true,6.984499981626868,ok,
+node-jose,6.2.13,hardened,ISS-INVALID,ISS,reject,401,false,true,3.963200026191771,unauthorized,
+node-jose,6.2.13,hardened,ISS-MISSING,ISS,reject,401,false,true,3.208699985407293,unauthorized,
+node-jose,6.2.13,hardened,AUD-INVALID,AUD,reject,401,false,true,4.32629999704659,unauthorized,
+node-jose,6.2.13,hardened,AUD-MISSING,AUD,reject,401,false,true,2.6425999822095037,unauthorized,
+node-jose,6.2.13,hardened,EXP-EXPIRED,EXP,reject,401,false,true,3.5561000695452094,unauthorized,
+node-jose,6.2.13,hardened,EXP-MISSING,EXP,reject,401,false,true,3.249799949117005,unauthorized,
+node-jose,6.2.13,hardened,NBF-FUTURE,NBF,reject,401,false,true,3.918800037354231,unauthorized,
+node-jose,6.2.13,hardened,NBF-MISSING,NBF,accept,200,true,true,2.89639993570745,ok,
+node-jose,6.2.13,hardened,ALG-NONE,ALG,reject,401,false,true,3.1388000352308154,unauthorized,
+node-jose,6.2.13,hardened,ALG-UNEXPECTED,ALG,reject,401,false,true,2.646500011906028,unauthorized,
+node-jose,6.2.13,hardened,ALG-CONFUSION,ALG,reject,401,false,true,21.76510007120669,unauthorized,
+node-jose,6.2.13,hardened,SIG-TAMPERED,SIG,reject,401,false,true,16.03250007610768,unauthorized,

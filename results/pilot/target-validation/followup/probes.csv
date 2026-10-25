@@ -1,0 +1,19 @@
+component,version,config,test_id,category,expected,actual_status,accepted,correct,latency_ms,response_body,www_authenticate
+dotnet-jwtbearer,8.0.8,default,EXP-SKEW-120,PROBE,reject,200,true,false,1.7982999561354518,"""ok""",
+dotnet-jwtbearer,8.0.8,default,EXP-PAST-3600,PROBE,reject,401,false,true,2.4634000146761537,,"Bearer error=""invalid_token"", error_description=""The token expired at '10/25/2026 17:39:25'"""
+dotnet-jwtbearer,8.0.8,default,ALG-RS512,PROBE,reject,200,true,false,27.69000001717359,"""ok""",
+dotnet-jwtbearer,8.0.8,hardened,EXP-SKEW-120,PROBE,reject,401,false,true,22.456299979239702,,"Bearer error=""invalid_token"", error_description=""The token expired at '10/25/2026 18:37:27'"""
+dotnet-jwtbearer,8.0.8,hardened,EXP-PAST-3600,PROBE,reject,401,false,true,2.129000029526651,,"Bearer error=""invalid_token"", error_description=""The token expired at '10/25/2026 17:39:27'"""
+dotnet-jwtbearer,8.0.8,hardened,ALG-RS512,PROBE,reject,401,false,true,1.6431000549346209,,"Bearer error=""invalid_token"", error_description=""The signature key was not found"""
+dotnet-jsonwebtokenhandler,8.19.1,default,EXP-SKEW-120,PROBE,reject,200,true,false,25.5550000583753,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,default,EXP-PAST-3600,PROBE,reject,401,false,true,1.9191999454051256,,
+dotnet-jsonwebtokenhandler,8.19.1,default,ALG-RS512,PROBE,reject,200,true,false,2.225100062787533,"""ok""",
+dotnet-jsonwebtokenhandler,8.19.1,hardened,EXP-SKEW-120,PROBE,reject,401,false,true,2.5713000213727355,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,EXP-PAST-3600,PROBE,reject,401,false,true,27.27620000950992,,
+dotnet-jsonwebtokenhandler,8.19.1,hardened,ALG-RS512,PROBE,reject,401,false,true,12.218000018037856,,
+node-jose,6.2.13,default,EXP-SKEW-120,PROBE,reject,401,false,true,2.2668999154120684,unauthorized,
+node-jose,6.2.13,default,EXP-PAST-3600,PROBE,reject,401,false,true,1.6775999683886766,unauthorized,
+node-jose,6.2.13,default,ALG-RS512,PROBE,reject,401,false,true,1.2108000228181481,unauthorized,
+node-jose,6.2.13,hardened,EXP-SKEW-120,PROBE,reject,401,false,true,27.01229997910559,unauthorized,
+node-jose,6.2.13,hardened,EXP-PAST-3600,PROBE,reject,401,false,true,15.700199990533292,unauthorized,
+node-jose,6.2.13,hardened,ALG-RS512,PROBE,reject,401,false,true,1.7417999915778637,unauthorized,

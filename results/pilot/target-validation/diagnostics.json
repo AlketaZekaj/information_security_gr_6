@@ -1,0 +1,1943 @@
+[
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "119faedaf252bfe2c1120d3546b0b4d3b804aac3c8a19103beac232796466086",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 59.16020006407052
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ISS-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "8a70f82a6eaa1e388e34fa6534cdb6b4ed4e56d1df6a338694ec34f2663e75e7",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The issuer 'https://evil.example.test' is invalid\""
+      },
+      "latency_ms": 24.66760005336255
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ISS-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "bb8f0e358f7387e68d662122be0ebeb9393a9d5bde7a43f7d7b670dbba41f012",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The issuer '' is invalid\""
+      },
+      "latency_ms": 3.6954000825062394
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "AUD-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b07fe2444b88cb1b1981cff992c697edb4d218901491b07b65e580857779e38a",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The audience 'other-api' is invalid\""
+      },
+      "latency_ms": 2.7677000034600496
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "AUD-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "9f34aff0138e9619285d0af58c7c91f974e2eda53cc6612882aeeadd006d9a1e",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The audience 'empty' is invalid\""
+      },
+      "latency_ms": 21.79150003939867
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "000e5cc0622a460712794c98f98fe4864320f060e7cb3400355b8f05c03bd345",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token lifetime is invalid; NotBefore: '10/25/2026 18:37:22', Expires: '10/25/2026 17:38:22'\""
+      },
+      "latency_ms": 7.55630002822727
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "EXP-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "4c3d48fb6eeb9cdf19045f048efbcc60ae0382957acb24d66a1190a47a4fcb8d",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token has no expiration\""
+      },
+      "latency_ms": 2.5649000890552998
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "a4acec1b245121b398db3f316bde647251a764023ae8f09e9e55ec6efd0d662e",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token is not valid before '10/25/2026 19:38:22'\""
+      },
+      "latency_ms": 2.0372000290080905
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "c3d85dfd3500b83b64c278c4892626aead732d497ad426197412a454b7f7e050",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 1.7993999645113945
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "67d8d3b66935e733cfa4bdc355f20bf4500272335f8da45629d91fdf815fc774",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature is invalid\""
+      },
+      "latency_ms": 13.558800099417567
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6757eacf231e61bf2ff3443a53255ba800edccf43623826ca11d73c20ae4e1ce",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 14.689299976453185
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "213c205f36a333e2e2cf3724189c55b5f1c0f51b514edb7eb2d6295d5aca56d8",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 1.6135999467223883
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "a85c98a1ed1f1988abdded43178541c4833472c492d1c990dbf80fee86c183c7",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 2.434200025163591
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "88d1c01fdef16d4955291edf21cac42b97febf146ba75f5103b3c754c9a9ae46",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 2.5140000507235527
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "default",
+    "test_id": "ALG-RS512",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "afd4a8d7017a1f5dcc431640b7c0bedcdb75555c7b414125870fe62a1ae0f071",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:23 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 2.4262000806629658
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "73008cc7d341d9b2745176d340874342182f8592e42ec4270d49201b9b4a7532",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 59.516899986192584
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ISS-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "863760559a6c43df848496fbb55eeec3220c91e55091943cb7e7d1be3eff3775",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The issuer 'https://evil.example.test' is invalid\""
+      },
+      "latency_ms": 23.223299998790026
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ISS-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "f5dd61b3b1790c41254151c60950edca65b2b93727d18154436645c62d1dd2a3",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The issuer '' is invalid\""
+      },
+      "latency_ms": 3.069800091907382
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "AUD-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "1001a0e4320919f64e5ce9a1a65b1e66335732f5e8061af36b217ee1fe152218",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The audience 'other-api' is invalid\""
+      },
+      "latency_ms": 2.0097000524401665
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "AUD-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "c19c5bf3eac36048ffaff3faa2a0def7c04e61af0d8eb3e34b356eb7d0b81d88",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The audience 'empty' is invalid\""
+      },
+      "latency_ms": 2.8565999818965793
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6dac173ab1d177f74a78816d2f228cbc21ff661c193016b3fb9ae1edda87874e",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token lifetime is invalid; NotBefore: '10/25/2026 18:37:24', Expires: '10/25/2026 17:38:24'\""
+      },
+      "latency_ms": 24.401700007729232
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "EXP-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6e3b0c40171f9efdac468878c67d5241a6c910b8bf0911306d8e600869837919",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token has no expiration\""
+      },
+      "latency_ms": 1.9403999904170632
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6c06539f4b925ea9c769e3597ed18abbb08c4e66c99eb9ff6ff1c356ae17aaf2",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token is not valid before '10/25/2026 19:38:24'\""
+      },
+      "latency_ms": 1.8085000338032842
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "e99a4bd00cc09fafc67c721a0a2c88535c4b06bb3fc2801c212d26f2fe87c13d",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 1.4224000042304397
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "3cf05e45c47fab1946abf068cc6111347b9af428207f77bcb9e69840c3963f8d",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature is invalid\""
+      },
+      "latency_ms": 1.56770006287843
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "17213290e4dcb8d2d25300db8ad1db29d31c1e37dd18907542fc296e4b7eecf7",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 1.6536000184714794
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "11de7002be92284b4780e6d86212b0be2402cdfccedde04137b5276ca8054b57",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 1.5112999826669693
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "8ca3fc738a97e869fe7021ba37d4d4150c46e4a9db1c055c7176cef665d0aba5",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 13.193299993872643
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "026e2893472db995c9d1c95cbe8f802e8766136ba62de95446b0e59111dd6feb",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The token expired at '10/25/2026 18:36:24'\""
+      },
+      "latency_ms": 2.5037999730557203
+    }
+  },
+  {
+    "component": "dotnet-jwtbearer",
+    "config": "hardened",
+    "test_id": "ALG-RS512",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6d166493a5277964677c99e057d1cfb5d237bde214c9945470eb8f0941da30d2",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:25 GMT",
+        "Server": "Kestrel",
+        "WWW-Authenticate": "Bearer error=\"invalid_token\", error_description=\"The signature key was not found\""
+      },
+      "latency_ms": 2.026899950578809
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "bf88fa66a4e251bd7a6a5c2342c4ca2c3ec3201f7edcfa980dce73b455eb3c05",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 61.67660001665354
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ISS-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b97748a5e7474e6cdc0309378694474e1bb8c0b612bf634eb2b8eaf6f2674a4e",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidIssuerException"
+      },
+      "latency_ms": 7.661900017410517
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ISS-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "90b2ed84de43f82107bf570e525adbe72ee29422652312c5b745d513c8c35558",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidIssuerException"
+      },
+      "latency_ms": 1.8351000035181642
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "AUD-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "d05b0b552d8547487167deac1c5bb502123345adfbf1d59251a80b57e829a99e",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidAudienceException"
+      },
+      "latency_ms": 1.6994000179693103
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "AUD-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "0a732a5c67f378e9a3e428a27efba89566c9a6f202ce9cdf87acf1a4f3d353ec",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidAudienceException"
+      },
+      "latency_ms": 1.9703999860212207
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "60766b65b237c86c97d418a9738182f5c5f7dc1223499dd97a5bbe0194fedd3b",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidLifetimeException"
+      },
+      "latency_ms": 7.034000009298325
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "EXP-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "7ab29e3791bd20dc8b0756c7521397e097692d8279b3ef73a68984cff3c7c2fc",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenNoExpirationException"
+      },
+      "latency_ms": 1.8726999405771494
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "461cabb371b57f7a1dc291493a3c680d04716408b7f7b279e05991bf3345c57a",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenNotYetValidException"
+      },
+      "latency_ms": 1.6739999409765005
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "264d87587a4abf9d36f86f7bba4e2e03c3fdd032ac5b1233b53cb0c11559de5e",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 1.2586000375449657
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "f03b12ea009f7a5ced1d665d0ffa4314a71c6160e32493db5ef239be18790e45",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidSignatureException"
+      },
+      "latency_ms": 13.323500053957105
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b5d00bc5ec33d7808f19e3de470cb7f13689c3f890fcd752aca3c42cfde91746",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.880299998447299
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "e06093650acaa62651b081b29f3451d486eae4325ca779afa9d23e9e59304ac2",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.358299981802702
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "7d73c54efb79a4161eba71a5138bf6a6a5acfd6f7a933b7d24a7ba63f9b6ff03",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.187399961054325
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "2318071765197c0dcd6e712819897f0f11cf588bed056fc4a58b347fd3069805",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 2.1178999450057745
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "default",
+    "test_id": "ALG-RS512",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "e569b4c48ff87415ca73159b8f137e72c16febede9b9e0ddfec528e5448e406a",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:26 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 2.0337000023573637
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "485b5b2078a32588718b54d4e71600ff6454a469e74d30b25b65bd61f3ff49bf",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 69.27199999336153
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ISS-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "8c7a514522a1674ea0636e174b436f48f2a3a07d8f57da586c8b0622e124af4d",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidIssuerException"
+      },
+      "latency_ms": 9.218999999575317
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ISS-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "d9c6a832ccc18b485537ae816d06b25844484ced14cbeeb091280c82814ace24",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidIssuerException"
+      },
+      "latency_ms": 23.89509999193251
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "AUD-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "215fea66928972bd3ab669075051d23067dbba175dff35df56f408663e625a07",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidAudienceException"
+      },
+      "latency_ms": 15.672300010919571
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "AUD-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "4ff424972e25a15e1fe8c049738a80849ccaa5222d804e8f9ac6b8f986f2d96f",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidAudienceException"
+      },
+      "latency_ms": 1.8085999181494117
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "8a62db700931415e9caaf5d61b70f131fe2dfdd10e523b25d420dc3a70b696b6",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidLifetimeException"
+      },
+      "latency_ms": 6.8651000037789345
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "EXP-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "be07008d674269c2d3f2dfb8f6fbeaf56872ea1d06e451aee4c2cf72a5dc489d",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenNoExpirationException"
+      },
+      "latency_ms": 1.5521000605076551
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "777fa6168343687b673a584c3b9abe06813ff7f8c6c54ab6015ec9dd24fac96a",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenNotYetValidException"
+      },
+      "latency_ms": 1.4650000957772136
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "c2c28a097987bdebb751eca7dd805dbc79fcd4f1aaa0aa4db41bb3ca3ba1d62a",
+    "response": {
+      "status": 200,
+      "body": "\"ok\"",
+      "headers": {
+        "Connection": "close",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "Transfer-Encoding": "chunked"
+      },
+      "latency_ms": 1.9946000538766384
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "d486259549f285f57bbb05b3c63c987a89573306972160bda16557a1df42677b",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenInvalidSignatureException"
+      },
+      "latency_ms": 1.8895999528467655
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "bc6ab13bb73ed123aef4c6a6d3829467e012e52ef45d445677154894c1db23e8",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.6898000612854958
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "be117a410c7ad3cb15331f815dbb5c0354a2bf67d5d6d42a25853f2e1545fd44",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.250099972821772
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "6e199e20392af4b6b2dd371d80745515801906a8e1fa3343dcdbd81a234400ff",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 1.146599999628961
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "7c037dcc83615ce2bd806c30b92a412d5482b212a7bf0d23db29ad31922d8306",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenExpiredException"
+      },
+      "latency_ms": 20.36750002298504
+    }
+  },
+  {
+    "component": "dotnet-jsonwebtokenhandler",
+    "config": "hardened",
+    "test_id": "ALG-RS512",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "e7045e70661da30effbc0952aa7b8174decdb474ab09ad421d4cac5aa94c8f86",
+    "response": {
+      "status": 401,
+      "body": "",
+      "headers": {
+        "Content-Length": "0",
+        "Connection": "close",
+        "Date": "Sun, 25 Oct 2026 18:38:28 GMT",
+        "Server": "Kestrel",
+        "X-Reject-Reason": "SecurityTokenSignatureKeyNotFoundException"
+      },
+      "latency_ms": 11.32110005710274
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "a2f2367a286360cdfb54b7183b2875b41028ead5e051d89aa070fbbd66ff3869",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 9.1905000153929
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ISS-INVALID",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "f235c34530976abba0141571ec32e4716a2f8fa49741fc71b68a523e53a15f5d",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.268499975092709
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ISS-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "73caa4f7e91fa44527dcada46501dcb8196b588ae53f2498587ccda4bf95ef4a",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 21.536799962632358
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "AUD-INVALID",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "31a31dc7ef665aa225ee00f28c55cd1e99ddeee4351c93c391f8183f2dfcd19a",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.6536999978125095
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "AUD-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "3b88bc9ff9c5ae88d1227f50a7c5823d0c990e65e38ec89c3cfa6d2b1e165263",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.986700041219592
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "0b78bfc068b75e9abe5681303509f1dede5d437819c0bc3d674b9e238d85c43b",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_EXPIRED:exp:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.5644000163301826
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "EXP-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "382df22788d91e45c8e956bc5e72e429137ee916de45b9d6f36769c1e894e1b7",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.522399998269975
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "26a677df76b9f7c122048b3c7de6c3da3b4723deba238b39ed932e871d6aedd3",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:nbf:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 15.24740003515035
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "55e066bad0fda7fde8bf96d4f9b9748f4fef214ee11f777537fd9bcd8d849865",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.9235000256448984
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "965eb336cdc67ba65eba1985cf73eda8b161a6029ec27e66c02caaa990191dfa",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JOSE_NOT_SUPPORTED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.2236999832093716
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "62df71a53e0275c4d2b5d1c452e0c352424ca4da35441cfc0efe6907cbe8d8e3",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "TypeError",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.0256000570952892
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "96829c31a6cba980d17b4ba674c6e5f8315e014357d2862b065f5bd1533c3ab0",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "TypeError",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 20.272699999623
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "3fa73ff96815dc49bdf8c61462c8e4e1c66f80ca5d2e2728f82fafb909c927df",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWS_SIGNATURE_VERIFICATION_FAILED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.384499995969236
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "47d1274397c8644e6e1cd28f0947dfc963e4b9e3a50022f790e1d586e4e0f4db",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_EXPIRED:exp:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.214199979789555
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "default",
+    "test_id": "ALG-RS512",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "06affa3b45f1ece6904920658d75e557609d7d1b50611a1e8c0c1e1373346bc0",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "TypeError",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:30 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 1.3408999657258391
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "CTRL-01",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "594c6192ba4e3487b5ca4418c25d2ffd96802002c8003ad83d8acf841e5f9c74",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 6.984499981626868
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ISS-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "5030dbc1a37417afad557a4ed8a30a1023cdec1ecb264283374d3234f99f7fa0",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:iss:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.963200026191771
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ISS-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "7c6963321a705a516b1f175b8b2b6765fb2529a3b77e77d594c49e4dd0a26e99",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:iss:missing",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.208699985407293
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "AUD-INVALID",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "4994854ae57c3d7ec730a99ead78531db2e912ed3f02693467809242493afc49",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:aud:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 4.32629999704659
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "AUD-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b96b39d6101ba9814ffc99a70aed06bb8a5fde21cd652812040003d15d86bcb7",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:aud:missing",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.6425999822095037
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "EXP-EXPIRED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "e0622d77ce51a835ee48608cb1ee4c2bcfbf9524ae9e144a3f59c4f68bb5f480",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_EXPIRED:exp:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.5561000695452094
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "EXP-MISSING",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "d9447b45c9c98e0d1bea380268bea8b4572d2caafd1af004e0bdb56447106b37",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:exp:missing",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.249799949117005
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "NBF-FUTURE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "3b8e91adba596091d00e2bd7c8701c3a02e0c05982f653530be071de19db0921",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_CLAIM_VALIDATION_FAILED:nbf:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.918800037354231
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "NBF-MISSING",
+    "predicted": "accept",
+    "actual": "accept",
+    "matches_prediction": true,
+    "token_sha256": "7ca3460aa32092794b2c250dd446a48c7745b094f8bbcda50f0a53375f764246",
+    "response": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "X-Powered-By": "Express",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2",
+        "ETag": "W/\"2-eoX0dku9ba8cNUXvu/DyeabcC+s\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.89639993570745
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ALG-NONE",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "819b3fde591c3e766dab94b3351b8c756a991835aaad79b561ffe6c6472e6011",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JOSE_ALG_NOT_ALLOWED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 3.1388000352308154
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ALG-UNEXPECTED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b48f0f2b914e0ef6fcc2b83b10166a17beb17f5c05582be95b3a24f47f13a26a",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JOSE_ALG_NOT_ALLOWED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.646500011906028
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ALG-CONFUSION",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "7e7db4af19642bf5ba39b9f74379b75d2b4dbf3886e36f78daf2d6bcda7e7936",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JOSE_ALG_NOT_ALLOWED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 21.76510007120669
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "SIG-TAMPERED",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "b539f0ddb849875f007dc1d35362cc8969459a11603c64cbf9601bc082d59e7e",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWS_SIGNATURE_VERIFICATION_FAILED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 16.03250007610768
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "EXP-SKEW-120",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "9a5d5f6ea8fb599d7bbbbb2f9fc608d1e8e32f67bbf810c93665003d02136c0e",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JWT_EXPIRED:exp:check_failed",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 2.4493999080732465
+    }
+  },
+  {
+    "component": "node-jose",
+    "config": "hardened",
+    "test_id": "ALG-RS512",
+    "predicted": "reject",
+    "actual": "reject",
+    "matches_prediction": true,
+    "token_sha256": "1351889fa8f9f70a76855afd6dfcf2e5f2d25b2d10c9abf279cee19ab15ded08",
+    "response": {
+      "status": 401,
+      "body": "unauthorized",
+      "headers": {
+        "X-Powered-By": "Express",
+        "X-Reject-Reason": "ERR_JOSE_ALG_NOT_ALLOWED",
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "12",
+        "ETag": "W/\"c-nZ8v8RL9rnQ4Jsq4VnjswLAAxa8\"",
+        "Date": "Sun, 25 Oct 2026 18:38:31 GMT",
+        "Connection": "close"
+      },
+      "latency_ms": 13.74930003657937
+    }
+  }
+]

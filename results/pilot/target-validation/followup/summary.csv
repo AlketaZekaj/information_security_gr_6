@@ -1,0 +1,7 @@
+component,config,cases,policy_matches,false_accepts,invalid_non_error,false_accept_rate,false_rejects,valid_non_error,false_reject_rate,errors
+dotnet-jwtbearer,default,13,13,0,11,0.0,0,2,0.0,0
+dotnet-jwtbearer,hardened,13,13,0,11,0.0,0,2,0.0,0
+dotnet-jsonwebtokenhandler,default,13,13,0,11,0.0,0,2,0.0,0
+dotnet-jsonwebtokenhandler,hardened,13,13,0,11,0.0,0,2,0.0,0
+node-jose,default,13,8,5,11,0.45454545454545453,0,2,0.0,0
+node-jose,hardened,13,13,0,11,0.0,0,2,0.0,0

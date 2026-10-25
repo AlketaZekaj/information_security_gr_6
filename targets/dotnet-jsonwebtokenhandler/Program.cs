@@ -11,7 +11,10 @@ if (mode is not ("default" or "hardened"))
     throw new InvalidOperationException("CONFIG_MODE must be 'default' or 'hardened'.");
 }
 
-using var policyDocument = JsonDocument.Parse(File.ReadAllText("/policy/policy.json"));
+var policyPath = Environment.GetEnvironmentVariable("POLICY") ?? "/policy/policy.json";
+var publicKeyPath = Environment.GetEnvironmentVariable("KEYS_PUB") ?? "/keys/public.pem";
+
+using var policyDocument = JsonDocument.Parse(File.ReadAllText(policyPath));
 var policy = policyDocument.RootElement;
 var issuer = policy.GetProperty("issuer").GetString()
     ?? throw new InvalidOperationException("policy.json issuer is missing.");
@@ -19,7 +22,7 @@ var audience = policy.GetProperty("audience").GetString()
     ?? throw new InvalidOperationException("policy.json audience is missing.");
 
 using var rsa = RSA.Create();
-rsa.ImportFromPem(File.ReadAllText("/keys/public.pem"));
+rsa.ImportFromPem(File.ReadAllText(publicKeyPath));
 var key = new RsaSecurityKey(rsa);
 
 var tokenValidationParameters = new TokenValidationParameters
