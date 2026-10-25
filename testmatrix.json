@@ -1,0 +1,106 @@
+[
+  {
+    "id": "CTRL-01",
+    "category": "CTRL",
+    "description": "Valid control token: RS256, iss/aud from policy.json, nbf = now - 60, exp = now + 3600.",
+    "changed_property": "none",
+    "expected": "accept",
+    "requirement": "A correctly signed token that satisfies the policy is accepted (setup check, not a requirement)"
+  },
+  {
+    "id": "ISS-INVALID",
+    "category": "ISS",
+    "description": "iss is https://evil.example.test instead of the policy issuer.",
+    "changed_property": "payload.iss",
+    "expected": "reject",
+    "requirement": "iss must equal policy.issuer"
+  },
+  {
+    "id": "ISS-MISSING",
+    "category": "ISS",
+    "description": "iss claim removed.",
+    "changed_property": "payload.iss (removed)",
+    "expected": "reject",
+    "requirement": "iss is required"
+  },
+  {
+    "id": "AUD-INVALID",
+    "category": "AUD",
+    "description": "aud is other-api instead of the policy audience.",
+    "changed_property": "payload.aud",
+    "expected": "reject",
+    "requirement": "aud must contain policy.audience"
+  },
+  {
+    "id": "AUD-MISSING",
+    "category": "AUD",
+    "description": "aud claim removed.",
+    "changed_property": "payload.aud (removed)",
+    "expected": "reject",
+    "requirement": "aud is required"
+  },
+  {
+    "id": "EXP-EXPIRED",
+    "category": "EXP",
+    "description": "exp = now - 3600 (one hour in the past, so clock skew cannot blur the result).",
+    "changed_property": "payload.exp",
+    "expected": "reject",
+    "requirement": "an expired token must be rejected"
+  },
+  {
+    "id": "EXP-MISSING",
+    "category": "EXP",
+    "description": "exp claim removed.",
+    "changed_property": "payload.exp (removed)",
+    "expected": "reject",
+    "requirement": "exp is required"
+  },
+  {
+    "id": "NBF-FUTURE",
+    "category": "NBF",
+    "description": "nbf = now + 3600 (one hour in the future).",
+    "changed_property": "payload.nbf",
+    "expected": "reject",
+    "requirement": "a token whose nbf is in the future must be rejected (nbf validated when present)"
+  },
+  {
+    "id": "NBF-MISSING",
+    "category": "NBF",
+    "description": "nbf claim removed. The policy does not require nbf, so this is expected to be accepted.",
+    "changed_property": "payload.nbf (removed)",
+    "expected": "accept",
+    "requirement": "nbf is optional: its absence must not cause rejection"
+  },
+  {
+    "id": "ALG-NONE",
+    "category": "ALG",
+    "description": "Header alg is none and the signature part is empty.",
+    "changed_property": "header.alg (signature empty)",
+    "expected": "reject",
+    "requirement": "unsigned tokens (alg none) must be rejected"
+  },
+  {
+    "id": "ALG-UNEXPECTED",
+    "category": "ALG",
+    "description": "Header alg is ES256 and the token is signed with the EC P-256 test key.",
+    "changed_property": "header.alg (signed with EC key)",
+    "expected": "reject",
+    "requirement": "only policy.allowed_algorithms (RS256) are accepted"
+  },
+  {
+    "id": "ALG-CONFUSION",
+    "category": "ALG",
+    "description": "Header alg is HS256 and the HMAC secret is the bytes of the RSA public key PEM.",
+    "changed_property": "header.alg (HMAC keyed with public.pem)",
+    "expected": "reject",
+    "requirement": "an HS256 token keyed with the RSA public key must be rejected (algorithm confusion)"
+  },
+  {
+    "id": "SIG-TAMPERED",
+    "category": "SIG",
+    "description": "Control token with payload.sub edited after signing; the original signature is kept.",
+    "changed_property": "payload.sub (signature left stale)",
+    "expected": "reject",
+    "requirement": "the signature must verify over the received header and payload"
+  }
+]
