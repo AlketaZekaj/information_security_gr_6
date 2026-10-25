@@ -1,0 +1,55 @@
+[
+  {
+    "name": "PyJWT",
+    "version": "2.15.1",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 8001,
+    "target_dir": "targets/python-pyjwt",
+    "native": {"command": ["{python}", "app.py"], "port": 8080}
+  },
+  {
+    "name": "JwtBearer",
+    "version": "8.0.8",
+    "type": "middleware",
+    "response_author": "framework",
+    "port": 8002,
+    "target_dir": "targets/dotnet-jwtbearer",
+    "native": {
+      "build": ["dotnet", "build", "-c", "Release", "--nologo", "-o", "bin/harness"],
+      "command": ["dotnet", "bin/harness/dotnet-jwtbearer.dll"],
+      "port": 8080
+    }
+  },
+  {
+    "name": "jsonwebtoken",
+    "version": "9.0.3",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 8003,
+    "target_dir": "targets/node-jsonwebtoken",
+    "native": {"command": ["node", "app.js"], "port": 8080}
+  },
+  {
+    "name": "jose",
+    "version": "6.2.13",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 8004,
+    "target_dir": "targets/node-jose",
+    "native": {"command": ["node", "app.js"], "port": 8080}
+  },
+  {
+    "name": "JsonWebTokenHandler",
+    "version": "8.19.1",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 8006,
+    "target_dir": "targets/dotnet-jsonwebtokenhandler",
+    "native": {
+      "build": ["dotnet", "build", "-c", "Release", "--nologo", "-o", "bin/harness"],
+      "command": ["dotnet", "bin/harness/dotnet-jsonwebtokenhandler.dll"],
+      "port": 8080
+    }
+  }
+]
