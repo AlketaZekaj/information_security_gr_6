@@ -16,6 +16,9 @@ obj/
 results/**/logs/
 *.log
 
+# Harness runs against harness/mock_server.py (fake targets, not evidence)
+results/mock/
+
 # Local editor settings and environment files
 .vscode/
 .idea/
