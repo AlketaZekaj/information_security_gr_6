@@ -72,6 +72,7 @@ The shared rules (policy, API contract, token rules, CSV columns, counting rules
 | JwtBearer (`Microsoft.AspNetCore.Authentication.JwtBearer`) | .NET 8 | middleware | 8.0.8 | 8002 | [`targets/dotnet-jwtbearer`](targets/dotnet-jwtbearer) |
 | jsonwebtoken | Node.js | library | 9.0.3 | 8003 | [`targets/node-jsonwebtoken`](targets/node-jsonwebtoken) |
 | jose | Node.js | library | 6.2.13 | 8004 | [`targets/node-jose`](targets/node-jose) |
+| express-jwt | Node.js | middleware | 8.5.1 | 8005 | [`targets/node-express-jwt`](targets/node-express-jwt) |
 | JsonWebTokenHandler (`Microsoft.IdentityModel.JsonWebTokens`) | .NET 10 | library | 8.19.1 | 8006 | [`targets/dotnet-jsonwebtokenhandler`](targets/dotnet-jsonwebtokenhandler) |
 
 Each target documents its default and hardened settings, its predictions and its measured
@@ -110,6 +111,7 @@ python3 -m venv .venv && . .venv/bin/activate
 pip install -r generator/requirements.txt -r targets/python-pyjwt/requirements.txt
 (cd targets/node-jose && npm ci)
 (cd targets/node-jsonwebtoken && npm ci)
+(cd targets/node-express-jwt && npm ci)
 python generator/make_keys.py
 ```
 

@@ -2,8 +2,6 @@
 
 Everything the three team members must agree on. Sections 1-3 are the agreed decisions. Anything marked **(proposed)** is an interpretation made while building the foundation and needs a yes/no from the team.
 
-Deadline for the whole team: **31/10/2026, 23:59:59**. Aim to freeze on Fri 30/10.
-
 ## 1. Agreed decisions
 
 1. **"Default" rule.** Copy the official quick-start and configure only the minimum so the valid control token (`CTRL-01`) is accepted. Cite the doc URL in a code comment. Write down every line that had to be added in the target's `CONFIG_NOTES.md`.
@@ -20,7 +18,7 @@ Deadline for the whole team: **31/10/2026, 23:59:59**. Aim to freeze on Fri 30/1
 | 8002 | `targets/dotnet-jwtbearer` |
 | 8003 | `targets/node-jsonwebtoken` |
 | 8004 | `targets/node-jose` |
-| 8005 | `express-jwt` (not in the repo yet) |
+| 8005 | `targets/node-express-jwt` |
 | 8006 | `targets/dotnet-jsonwebtokenhandler` |
 
 The ports above are **host** ports. **(proposed)** Every container listens on 8080 internally (this is what the existing `node-jose`, `dotnet-jwtbearer` and `dotnet-jsonwebtokenhandler` targets already do) and compose maps `8001:8080`, `8002:8080`, and so on. `python-pyjwt` and `node-jsonwebtoken` follow the same rule.

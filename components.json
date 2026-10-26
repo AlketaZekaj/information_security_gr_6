@@ -40,6 +40,15 @@
     "native": {"command": ["node", "app.js"], "port": 8080}
   },
   {
+    "name": "express-jwt",
+    "version": "8.5.1",
+    "type": "middleware",
+    "response_author": "wrapper",
+    "port": 8005,
+    "target_dir": "targets/node-express-jwt",
+    "native": {"command": ["node", "app.js"], "port": 8080}
+  },
+  {
     "name": "JsonWebTokenHandler",
     "version": "8.19.1",
     "type": "library",

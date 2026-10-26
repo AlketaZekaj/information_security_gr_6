@@ -1,0 +1,81 @@
+# Generate keys/public.pem before starting: python generator/make_keys.py
+# Start default mode: docker compose up --build --wait
+# PowerShell hardened mode:
+#   $env:CONFIG_MODE = 'hardened'
+#   docker compose up --build --force-recreate --wait
+# Stop this environment: docker compose down
+name: jwt-evaluation
+
+x-target: &target
+  environment:
+    CONFIG_MODE: ${CONFIG_MODE:-default}
+  volumes:
+    - type: bind
+      source: ./keys/public.pem
+      target: /keys/public.pem
+      read_only: true
+      bind:
+        create_host_path: false
+    - type: bind
+      source: ./policy.json
+      target: /policy/policy.json
+      read_only: true
+      bind:
+        create_host_path: false
+
+x-healthcheck: &healthcheck
+  interval: 5s
+  timeout: 3s
+  retries: 12
+  start_period: 10s
+
+x-node-healthcheck: &node-healthcheck
+  <<: *healthcheck
+  test:
+    - CMD
+    - node
+    - -e
+    - "const http = require('node:http'); const req = http.get('http://127.0.0.1:8080/health', res => { res.resume(); process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.setTimeout(2000, () => { req.destroy(); process.exit(1); });"
+
+x-dotnet-healthcheck: &dotnet-healthcheck
+  <<: *healthcheck
+  test: ["CMD", "curl", "--fail", "--silent", "--show-error", "--max-time", "2", "http://127.0.0.1:8080/health"]
+
+services:
+  python-pyjwt:
+    <<: *target
+    build: ./targets/python-pyjwt
+    ports: ["127.0.0.1:8001:8080"]
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "python", "-c", "import urllib.request; r = urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2); raise SystemExit(0 if r.status == 200 else 1)"]
+
+  dotnet-jwtbearer:
+    <<: *target
+    build: ./targets/dotnet-jwtbearer
+    ports: ["127.0.0.1:8002:8080"]
+    healthcheck: *dotnet-healthcheck
+
+  node-jsonwebtoken:
+    <<: *target
+    build: ./targets/node-jsonwebtoken
+    ports: ["127.0.0.1:8003:8080"]
+    healthcheck: *node-healthcheck
+
+  node-jose:
+    <<: *target
+    build: ./targets/node-jose
+    ports: ["127.0.0.1:8004:8080"]
+    healthcheck: *node-healthcheck
+
+  node-express-jwt:
+    <<: *target
+    build: ./targets/node-express-jwt
+    ports: ["127.0.0.1:8005:8080"]
+    healthcheck: *node-healthcheck
+
+  dotnet-jsonwebtokenhandler:
+    <<: *target
+    build: ./targets/dotnet-jsonwebtokenhandler
+    ports: ["127.0.0.1:8006:8080"]
+    healthcheck: *dotnet-healthcheck
