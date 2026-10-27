@@ -6,6 +6,7 @@
     "response_author": "wrapper",
     "port": 8001,
     "target_dir": "targets/python-pyjwt",
+    "service": "python-pyjwt",
     "native": {"command": ["{python}", "app.py"], "port": 8080}
   },
   {
@@ -15,6 +16,7 @@
     "response_author": "framework",
     "port": 8002,
     "target_dir": "targets/dotnet-jwtbearer",
+    "service": "dotnet-jwtbearer",
     "native": {
       "build": ["dotnet", "build", "-c", "Release", "--nologo", "-o", "bin/harness"],
       "command": ["dotnet", "bin/harness/dotnet-jwtbearer.dll"],
@@ -28,6 +30,7 @@
     "response_author": "wrapper",
     "port": 8003,
     "target_dir": "targets/node-jsonwebtoken",
+    "service": "node-jsonwebtoken",
     "native": {"command": ["node", "app.js"], "port": 8080}
   },
   {
@@ -37,6 +40,7 @@
     "response_author": "wrapper",
     "port": 8004,
     "target_dir": "targets/node-jose",
+    "service": "node-jose",
     "native": {"command": ["node", "app.js"], "port": 8080}
   },
   {
@@ -46,6 +50,7 @@
     "response_author": "wrapper",
     "port": 8005,
     "target_dir": "targets/node-express-jwt",
+    "service": "node-express-jwt",
     "native": {"command": ["node", "app.js"], "port": 8080}
   },
   {
@@ -55,6 +60,7 @@
     "response_author": "wrapper",
     "port": 8006,
     "target_dir": "targets/dotnet-jsonwebtokenhandler",
+    "service": "dotnet-jsonwebtokenhandler",
     "native": {
       "build": ["dotnet", "build", "-c", "Release", "--nologo", "-o", "bin/harness"],
       "command": ["dotnet", "bin/harness/dotnet-jsonwebtokenhandler.dll"],
