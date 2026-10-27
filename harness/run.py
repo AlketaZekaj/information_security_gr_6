@@ -4,14 +4,18 @@
   python harness/run.py                           # all components, default + hardened
   python harness/run.py --components PyJWT jose   # a subset
   python harness/run.py --pilot                   # pilot subset, written to results/pilot/
-  python harness/run.py --components-file harness/mock_components.json --output results/mock
+  python harness/run.py --launcher native --components-file harness/mock_components.json \\
+      --output results/mock
 
 For each component and configuration: start the target, regenerate the tokens, send the
 valid control token (CTRL-01) as a gate, then send every case and record one row per
-request. A component whose control token is not accepted is stopped and left out of
-raw.csv entirely, so data from a failed setup never reaches the metrics.
+request. A component whose control token is not accepted, or that reports a different
+mode than the one requested, is stopped and left out of raw.csv entirely, so data from a
+failed setup never reaches the metrics.
 
 Launchers (how a target is started):
+  docker  (default) build the component's docker-compose.yml service, then recreate its
+          container with CONFIG_MODE set for each configuration; needs Docker Compose
   native  start the target as a local process, as described in components.json; the
           toolchain (Python, Node, .NET) must be installed and the targets' dependencies
           present (pip install / npm ci)
@@ -187,6 +191,60 @@ def native_target(component, config, logs, health_timeout):
                 process.wait()
 
 
+def compose(arguments, log, config="default", timeout=600):
+    """Run `docker compose ...` in the repository with output to log; return True on success."""
+    # compose reads CONFIG_MODE=${CONFIG_MODE:-default}, so the mode is passed through the environment.
+    try:
+        result = subprocess.run(["docker", "compose", *arguments], cwd=ROOT, env=dict(os.environ, CONFIG_MODE=config),
+                                stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        log.write(f"\nharness: docker compose {arguments[0]} failed: {error}\n")
+        return False
+    return result.returncode == 0
+
+
+def compose_available():
+    try:
+        return subprocess.run(["docker", "compose", "version"], capture_output=True).returncode == 0
+    except OSError:
+        return False
+
+
+def compose_service(component):
+    service = component.get("service")
+    if not service:
+        raise SetupError("no docker compose service in the components file")
+    return service
+
+
+def build_docker(component, logs):
+    service = compose_service(component)
+    log_path = logs / f"{component['name']}-build.log"
+    print(f"{component['name']}: building image...", flush=True)
+    with log_path.open("w", encoding="utf-8") as log:
+        if not compose(["build", service], log):
+            raise SetupError(f"docker compose build failed; see {relative(log_path)}")
+
+
+@contextlib.contextmanager
+def docker_target(component, config, logs, health_timeout):
+    service = compose_service(component)
+    log_path = logs / f"{component['name']}-{config}.log"
+    with log_path.open("w", encoding="utf-8") as log:
+        try:
+            # --force-recreate: a running container keeps its old CONFIG_MODE otherwise.
+            if not compose(["up", "--detach", "--force-recreate", "--no-build", "--no-deps", service],
+                           log, config, timeout=180):
+                raise SetupError(f"docker compose up failed; see {relative(log_path)}")
+            base_url = f"http://127.0.0.1:{component['port']}"
+            wait_healthy(base_url, health_timeout, log_path=log_path)
+            yield base_url
+        finally:
+            log.flush()
+            compose(["logs", "--no-color", service], log, timeout=60)
+            compose(["stop", service], log, timeout=60)
+
+
 @contextlib.contextmanager
 def running_target(component, config, logs, health_timeout):
     base_url = f"http://127.0.0.1:{component['port']}"
@@ -194,7 +252,8 @@ def running_target(component, config, logs, health_timeout):
     yield base_url
 
 
-LAUNCHERS = {"native": native_target, "none": running_target}
+LAUNCHERS = {"docker": docker_target, "native": native_target, "none": running_target}
+BUILDERS = {"docker": build_docker, "native": build_native}
 
 
 def fresh_tokens(case_ids):
@@ -220,10 +279,22 @@ def gate_message(status, body):
     return f"control token returned {status}: setup error"
 
 
+def reported_mode(base_url):
+    """The mode a target reports on /health when its body is JSON with a 'config' field, else None."""
+    body = get(base_url + "/health", timeout=2)[1]
+    try:
+        return json.loads(body).get("config")
+    except (ValueError, AttributeError):
+        return None
+
+
 def measure(component, config, cases, args, logs, generations):
     """Run every case against one component in one configuration; return its rows."""
     launcher = LAUNCHERS[args.launcher]
     with launcher(component, config, logs, args.health_timeout) as base_url:
+        mode = reported_mode(base_url)
+        if mode is not None and mode != config:
+            raise SetupError(f"target reports mode {mode!r} instead of {config!r}: setup error")
         tokens, generated_at = fresh_tokens([case["id"] for case in cases])
         generations.append({"component": component["name"], "config": config, "generated_at": generated_at})
         status, body, _, _ = get(base_url + "/protected", tokens["CTRL-01"], args.request_timeout)
@@ -274,7 +345,7 @@ def parse_args():
                         help=f"cases {', '.join(PILOT_CASES)} on {', '.join(PILOT_COMPONENTS)} "
                              "(unless --components is given); output defaults to results/pilot/")
     parser.add_argument("--output", help="output directory (default results/, or results/pilot/ with --pilot)")
-    parser.add_argument("--launcher", choices=sorted(LAUNCHERS), default="native")
+    parser.add_argument("--launcher", choices=sorted(LAUNCHERS), default="docker")
     parser.add_argument("--health-timeout", type=float, default=60.0, help="seconds to wait for /health")
     parser.add_argument("--request-timeout", type=float, default=5.0, help="seconds per request")
     args = parser.parse_args()
@@ -298,6 +369,11 @@ def main():
         cases = [case for case in matrix if not args.pilot or case["id"] in PILOT_CASES]
         if not any(case["id"] == "CTRL-01" for case in cases):
             raise AbortRun("testmatrix.json has no CTRL-01, so the setup gate cannot run")
+        # A missing key would otherwise surface as one confusing failure per component.
+        if not (ROOT / "keys" / "public.pem").is_file():
+            raise AbortRun("keys/public.pem is missing or not a file: run python generator/make_keys.py")
+        if args.launcher == "docker" and not compose_available():
+            raise AbortRun("docker compose is not available: install Docker or use --launcher native")
     except AbortRun as error:
         print(f"ABORTED: {error}", file=sys.stderr)
         return 1
@@ -312,8 +388,8 @@ def main():
         for component in components:
             name, component_rows, step = component["name"], [], "build"
             try:
-                if args.launcher == "native":
-                    build_native(component, logs)
+                if args.launcher in BUILDERS:
+                    BUILDERS[args.launcher](component, logs)
                 for step in args.configs:
                     config_rows = measure(component, step, cases, args, logs, generations)
                     as_expected = sum(row["correct"] == "true" for row in config_rows)

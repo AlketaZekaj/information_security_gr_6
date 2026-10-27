@@ -100,18 +100,13 @@ is in [`components.json`](components.json).
 ### Prerequisites
 
 - Python 3.11 or newer
-- Node.js 22
-- .NET SDK 8 and .NET SDK 10
-- Docker (optional, for running targets in containers)
+- Docker with Docker Compose
 
 ### Setup
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install -r generator/requirements.txt -r targets/python-pyjwt/requirements.txt
-(cd targets/node-jose && npm ci)
-(cd targets/node-jsonwebtoken && npm ci)
-(cd targets/node-express-jwt && npm ci)
+pip install -r generator/requirements.txt
 python generator/make_keys.py
 ```
 
@@ -122,9 +117,10 @@ python harness/run.py          # all components, default and hardened; writes re
 python harness/metrics.py      # reads results/raw.csv and writes the summary files beside it
 ```
 
-The harness starts each target as a local process, one at a time on port 8080, so nothing
-else may be listening there. It regenerates the tokens before each component and mode so
-the time-based tokens are always fresh.
+For each component, the harness builds its service from
+[`docker-compose.yml`](docker-compose.yml), then recreates the container once per mode with
+the matching `CONFIG_MODE`. It regenerates the tokens before each component and mode, so
+the time-based tokens are always fresh, and stops each container when it is done.
 
 ```bash
 python harness/run.py --components PyJWT jose     # only some components
@@ -133,27 +129,39 @@ python harness/run.py --output /tmp/try           # write somewhere else
 python harness/run.py --help
 ```
 
+### Run without Docker
+
+The targets can also run as local processes, one at a time on port 8080. This needs
+Node.js 22 and the .NET SDKs 8 and 10, plus the targets' dependencies:
+
+```bash
+pip install -r targets/python-pyjwt/requirements.txt
+(cd targets/node-jose && npm ci)
+(cd targets/node-jsonwebtoken && npm ci)
+(cd targets/node-express-jwt && npm ci)
+python harness/run.py --launcher native
+```
+
 ### Test the harness without the real targets
 
 ```bash
-python harness/run.py --components-file harness/mock_components.json --output results/mock
+python harness/run.py --launcher native --components-file harness/mock_components.json --output results/mock
 python harness/metrics.py results/mock/raw.csv --components-file harness/mock_components.json
 ```
 
 One of the mock targets rejects the control token on purpose, so this run ends with exit
 code 3 and shows the setup check stopping that target.
 
-### Run a single target in Docker
-
-Generate the keys first; otherwise Docker creates `keys/public.pem` as a directory.
+### Start the targets manually
 
 ```bash
-docker build -t jose targets/node-jose
-docker run -d --rm --name jose -p 8004:8080 -e CONFIG_MODE=default \
-  -v "$PWD/keys/public.pem:/keys/public.pem:ro" -v "$PWD/policy.json:/policy/policy.json:ro" jose
+docker compose up --build --wait                                  # default mode
+CONFIG_MODE=hardened docker compose up --build --force-recreate --wait
 python generator/generate.py && python generator/check_target.py http://localhost:8004
-docker stop jose
+docker compose down
 ```
+
+The ports are listed under [Components](#components).
 
 ## Classification and metrics
 
@@ -164,7 +172,9 @@ counted as rejections, because a crash is not validation.
 Before any test token is sent, the control token `CTRL-01` must be accepted. If it is not,
 the target is stopped with a message such as
 `PyJWT / hardened: control token rejected with 401: setup error`, and none of its data is
-used. A target that rejects everything would otherwise look perfectly secure.
+used. A target that rejects everything would otherwise look perfectly secure. A target
+whose `/health` response reports a different mode than the one requested is stopped the
+same way.
 
 | Metric | Definition |
 |---|---|
