@@ -57,16 +57,18 @@ These are configured image references, not proof of a successful container run. 
 
 | Target | Stage | Image reference |
 |---|---|---|
-| dotnet-jsonwebtokenhandler | build | `mcr.microsoft.com/dotnet/sdk:10.0` |
-| dotnet-jsonwebtokenhandler | final | `mcr.microsoft.com/dotnet/aspnet:10.0` |
-| dotnet-jwtbearer | build | `mcr.microsoft.com/dotnet/sdk:8.0` |
-| dotnet-jwtbearer | final | `mcr.microsoft.com/dotnet/aspnet:8.0` |
+| dotnet-jsonwebtokenhandler | build (SDK 10.0.403) | `mcr.microsoft.com/dotnet/sdk:10.0@sha256:de4fe90a98845d75910b9769662465c84de1a934665c431279d1382b2bddc02b` |
+| dotnet-jsonwebtokenhandler | final (runtime 10.0.14) | `mcr.microsoft.com/dotnet/aspnet:10.0@sha256:de0ee358cdd672f7017a003bed21e9ac9ed48a27c922a59b18175b6e82fa7fee` |
+| dotnet-jwtbearer | build (SDK 8.0.427) | `mcr.microsoft.com/dotnet/sdk:8.0@sha256:6ba9644da07bb5b560a402acec9ca38711a0762969f1b61da261df5c9f6f85da` |
+| dotnet-jwtbearer | final (runtime 8.0.33) | `mcr.microsoft.com/dotnet/aspnet:8.0@sha256:ea721098d6ea2894ff9bd8387821a1659d4765d6c014b8d648bb1da16f016f5a` |
+| java-spring-security | build | `maven:3.9-eclipse-temurin-21@sha256:99e61abcff91a9b1333463bd8451fb18495d6eba9250ac66a338b518f8278320` |
+| java-spring-security | final | `eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99` |
 | node-express-jwt | runtime | `node:22.20.0-slim@sha256:b21fe589dfbe5cc39365d0544b9be3f1f33f55f3c86c87a76ff65a02f8f5848e` |
-| node-jose | runtime | `node:22.20.0-slim` |
+| node-jose | runtime | `node:22.20.0-slim@sha256:b21fe589dfbe5cc39365d0544b9be3f1f33f55f3c86c87a76ff65a02f8f5848e` |
 | node-jsonwebtoken | runtime | `node:22.20.0-slim@sha256:b21fe589dfbe5cc39365d0544b9be3f1f33f55f3c86c87a76ff65a02f8f5848e` |
 | python-pyjwt | runtime | `python:3.13.15-slim-bookworm@sha256:2325bb286ec344af3e5898cc224b5844e2707ac6e26b1632516fd3edc84a5e26` |
 
-The .NET `8.0` and `10.0` tags float across patches. jose has a fixed Node version tag but no digest. The other Node targets and PyJWT include digests. Exact container SDK/runtime versions must be captured after building; do not infer them from the native pilot. OS packages installed by apt are not pinned.
+Every base image is pinned by digest, so a rebuild uses exactly the same image. The SDK and runtime versions in parentheses were read from the pinned .NET images (`dotnet --version`, `dotnet --list-runtimes`). OS packages installed by apt are not pinned.
 
 ## Local environment inspected on 27 October 2026
 

@@ -234,6 +234,20 @@ def compose_service(component):
     return service
 
 
+def build_all_docker(components, logs):
+    """Build every selected image in one parallel `docker compose build`.
+
+    Returns the services that were built. On failure it returns none, so each component
+    is then built on its own and the failure is reported for the component it belongs to;
+    the images that did build come from the cache."""
+    services = [component["service"] for component in components if component.get("service")]
+    if not services:
+        return set()
+    print(f"building {len(services)} image(s) in parallel...", flush=True)
+    with (logs / "build-all.log").open("w", encoding="utf-8") as log:
+        return set(services) if compose(["build", *services], log) else set()
+
+
 def build_docker(component, logs):
     service = compose_service(component)
     log_path = logs / f"{component['name']}-build.log"
@@ -402,10 +416,11 @@ def main():
 
     rows, failures, generations = [], [], []
     try:
+        prebuilt = build_all_docker(components, logs) if args.launcher == "docker" else set()
         for component in components:
             name, component_rows, step = component["name"], [], "build"
             try:
-                if args.launcher in BUILDERS:
+                if args.launcher in BUILDERS and component.get("service") not in prebuilt:
                     BUILDERS[args.launcher](component, logs)
                 for step in args.configs:
                     config_rows = measure(component, step, cases, args, logs, generations)
