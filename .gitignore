@@ -7,10 +7,11 @@ __pycache__/
 .venv/
 node_modules/
 
-# Local test dependencies and .NET build output
+# Local test dependencies and .NET/Maven build output
 .tools/
 bin/
 obj/
+target/
 
 # Generated process/build logs; keep CSV, JSON evidence and Markdown reports
 results/**/logs/

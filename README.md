@@ -74,6 +74,7 @@ The shared rules (policy, API contract, token rules, CSV columns, counting rules
 | jose | Node.js | library | 6.2.13 | 8004 | [`targets/node-jose`](targets/node-jose) |
 | express-jwt | Node.js | middleware | 8.5.1 | 8005 | [`targets/node-express-jwt`](targets/node-express-jwt) |
 | JsonWebTokenHandler (`Microsoft.IdentityModel.JsonWebTokens`) | .NET 10 | library | 8.19.1 | 8006 | [`targets/dotnet-jsonwebtokenhandler`](targets/dotnet-jsonwebtokenhandler) |
+| Spring Security OAuth2 Resource Server | Java 21 | middleware | 7.1.1 | 8007 | [`targets/java-spring-security`](targets/java-spring-security) |
 
 Each target documents its default and hardened settings, its predictions and its measured
 results in its own `CONFIG_NOTES.md`. The same list, with launch details for the harness,
@@ -139,7 +140,7 @@ python harness/run.py --help
 ### Run without Docker
 
 The targets can also run as local processes, one at a time on port 8080. This needs
-Node.js 22 and the .NET SDKs 8 and 10, plus the targets' dependencies:
+Node.js 22, the .NET SDKs 8 and 10, and Java 21 with Maven, plus the targets' dependencies:
 
 ```bash
 pip install -r targets/python-pyjwt/requirements.txt
