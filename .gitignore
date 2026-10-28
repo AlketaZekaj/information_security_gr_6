@@ -19,6 +19,9 @@ results/**/logs/
 # Harness runs against harness/mock_server.py (fake targets, not evidence)
 results/mock/
 
+# Local web UI evaluation runs (export explicitly when collecting evidence)
+results/web/
+
 # Local editor settings and environment files
 .vscode/
 .idea/

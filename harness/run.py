@@ -144,6 +144,28 @@ def expand(command, port):
     return [sys.executable if arg == "{python}" else arg.replace("{port}", str(port)) for arg in command]
 
 
+def stop_native_process(process, port):
+    """Stop only the owned target, including Windows virtualenv launcher children."""
+    if process.poll() is None:
+        if os.name == "nt":
+            # python.exe in a Windows venv is a redirector. Terminating only that
+            # parent can leave its actual interpreter listening between modes.
+            subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                           capture_output=True, timeout=15, creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            process.terminate()
+    try:
+        process.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait()
+    # Socket teardown can finish after process exit on Windows. The next mode
+    # still performs its independent port-in-use check before launching.
+    deadline = time.monotonic() + 3
+    while port_in_use(port) and time.monotonic() < deadline:
+        time.sleep(0.1)
+
+
 def build_native(component, logs):
     command = component.get("native", {}).get("build")
     if not command:
@@ -183,12 +205,7 @@ def native_target(component, config, logs, health_timeout):
             wait_healthy(base_url, health_timeout, process, log_path)
             yield base_url
         finally:
-            process.terminate()
-            try:
-                process.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait()
+            stop_native_process(process, port)
 
 
 def compose(arguments, log, config="default", timeout=600):

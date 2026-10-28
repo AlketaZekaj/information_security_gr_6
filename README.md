@@ -97,6 +97,13 @@ is in [`components.json`](components.json).
 
 ## Getting started
 
+### Interactive web application
+
+Run `python web/server.py` using the Python environment with the generator dependencies
+installed, then open **http://127.0.0.1:8765**. JWT Lab presents the project, generates and
+inspects tokens, runs selected targets, and compares real results in charts and a matrix.
+See [`web/README.md`](web/README.md) for setup, runtime requirements, and data handling.
+
 ### Prerequisites
 
 - Python 3.11 or newer
