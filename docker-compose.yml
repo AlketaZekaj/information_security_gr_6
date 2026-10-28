@@ -79,3 +79,12 @@ services:
     build: ./targets/dotnet-jsonwebtokenhandler
     ports: ["127.0.0.1:8006:8080"]
     healthcheck: *dotnet-healthcheck
+
+  java-spring-security:
+    <<: *target
+    build: ./targets/java-spring-security
+    ports: ["127.0.0.1:8007:8080"]
+    healthcheck:
+      <<: *healthcheck
+      start_period: 30s
+      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "--max-time", "2", "http://127.0.0.1:8080/health"]
