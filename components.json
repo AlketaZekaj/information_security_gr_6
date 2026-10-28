@@ -66,5 +66,19 @@
       "command": ["dotnet", "bin/harness/dotnet-jsonwebtokenhandler.dll"],
       "port": 8080
     }
+  },
+  {
+    "name": "spring-security",
+    "version": "7.1.1",
+    "type": "middleware",
+    "response_author": "framework",
+    "port": 8007,
+    "target_dir": "targets/java-spring-security",
+    "service": "java-spring-security",
+    "native": {
+      "build": ["mvn", "-q", "-B", "package", "-DskipTests"],
+      "command": ["java", "-jar", "target/app.jar"],
+      "port": 8080
+    }
   }
 ]

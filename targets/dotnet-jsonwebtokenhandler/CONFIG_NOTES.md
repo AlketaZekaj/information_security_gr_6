@@ -9,11 +9,8 @@ Default supplies exactly IssuerSigningKey, ValidIssuer and ValidAudience in
 TokenValidationParameters. No Validate* flag, algorithm list or clock skew is
 explicitly set in that branch. Those three supplied values are baseline setup.
 
-Tested 2026-10-25: **IdentityModel.JsonWebTokens/Tokens 8.19.1; SDK 10.0.402; runtime 10.0.13**, native Windows. Both modes accepted CTRL-01.
-See [full report](../../results/pilot/target-validation/REPORT.md),
-[raw 15-case results](../../results/pilot/target-validation/expanded-matrix/raw.csv), and
-[pre-run predictions](../../results/pilot/target-validation/expanded-matrix/PREDICTIONS.md).
-Container execution is untested because Docker Desktop failed to start.
+Versions: **IdentityModel.JsonWebTokens/Tokens 8.19.1; .NET runtime 10.0.14** (Docker image).
+Measured with the harness (`harness/run.py`); each run's `run.json` records the toolchain used. Both modes accept CTRL-01.
 
 The effective defaults were checked against the
 [versioned source](https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/blob/8.19.1/src/Microsoft.IdentityModel.Tokens/TokenValidationParameters.cs)
@@ -75,9 +72,6 @@ informed by the earlier pilot and its probes, not an independent first run.
   iat/nbf are two hours ago, removing the earlier invalid-interval confound.
 - Both new cases now count in raw.csv and summary.csv. They are not separate probes.
 
-See [matrix rows](../../results/pilot/target-validation/expanded-matrix/raw.csv) and
-[complete headers](../../results/pilot/target-validation/expanded-matrix/diagnostics.json).
-
 ## Response and interpretation limits
 
 The wrapper returns 401 with an empty body and an X-Reject-Reason exception type. The library supplies a validation result, not an HTTP response. There is no WWW-Authenticate header in this wrapper. Algorithm restrictions may surface as a
@@ -87,5 +81,4 @@ versions, so identical outcomes do not isolate the middleware-versus-library
 factor. No observed acceptance behavior contradicted the checked defaults.
 
 For local runs, KEYS_PUB and POLICY select files. When unset, the paths remain
-/keys/public.pem and /policy/policy.json. See the report for rerun commands and
-the Docker limitation. Startup logs record CONFIG_MODE.
+/keys/public.pem and /policy/policy.json. Startup logs record CONFIG_MODE.

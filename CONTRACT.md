@@ -7,7 +7,7 @@ Everything the three team members must agree on. Sections 1-3 are the agreed dec
 1. **"Default" rule.** Copy the official quick-start and configure only the minimum so the valid control token (`CTRL-01`) is accepted. Cite the doc URL in a code comment. Write down every line that had to be added in the target's `CONFIG_NOTES.md`.
 2. **Policy.** Required claims are `iss`, `aud`, `exp`. `nbf` is validated *when present* but is not required, so `NBF-MISSING` is expected to be **accepted**. (This corrects the earlier "everything except the control must be rejected".)
 3. **Time-based tokens.** `EXP-EXPIRED` is 1 hour in the past and `NBF-FUTURE` is 1 hour in the future, beyond the .NET default 5-minute skew. `EXP-SKEW-120` is 2 minutes expired and specifically tests whether the default tolerance violates the policy's zero skew. Base `iat` and `nbf` are 2 hours ago so both expired tokens retain a valid chronological interval.
-4. **Ports.** PyJWT 8001, JwtBearer 8002, jsonwebtoken 8003, jose 8004, express-jwt 8005, JsonWebTokenHandler 8006.
+4. **Ports.** PyJWT 8001, JwtBearer 8002, jsonwebtoken 8003, jose 8004, express-jwt 8005, JsonWebTokenHandler 8006, Spring Security 8007.
 5. **Mode switching.** Compose reads `CONFIG_MODE=${CONFIG_MODE:-default}`; the harness recreates the containers for each mode.
 6. **Extra CSV column:** `www_authenticate`.
 7. **Status handling.** 200 = accepted, 401/403 = rejected, anything else = error, reported separately and never counted as a rejection.
@@ -20,6 +20,7 @@ Everything the three team members must agree on. Sections 1-3 are the agreed dec
 | 8004 | `targets/node-jose` |
 | 8005 | `targets/node-express-jwt` |
 | 8006 | `targets/dotnet-jsonwebtokenhandler` |
+| 8007 | `targets/java-spring-security` |
 
 The ports above are **host** ports. **(proposed)** Every container listens on 8080 internally (this is what the existing `node-jose`, `dotnet-jwtbearer` and `dotnet-jsonwebtokenhandler` targets already do) and compose maps `8001:8080`, `8002:8080`, and so on. `python-pyjwt` and `node-jsonwebtoken` follow the same rule.
 

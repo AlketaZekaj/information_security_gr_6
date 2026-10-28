@@ -74,6 +74,7 @@ The shared rules (policy, API contract, token rules, CSV columns, counting rules
 | jose | Node.js | library | 6.2.13 | 8004 | [`targets/node-jose`](targets/node-jose) |
 | express-jwt | Node.js | middleware | 8.5.1 | 8005 | [`targets/node-express-jwt`](targets/node-express-jwt) |
 | JsonWebTokenHandler (`Microsoft.IdentityModel.JsonWebTokens`) | .NET 10 | library | 8.19.1 | 8006 | [`targets/dotnet-jsonwebtokenhandler`](targets/dotnet-jsonwebtokenhandler) |
+| Spring Security OAuth2 Resource Server | Java 21 | middleware | 7.1.1 | 8007 | [`targets/java-spring-security`](targets/java-spring-security) |
 
 Each target documents its default and hardened settings, its predictions and its measured
 results in its own `CONFIG_NOTES.md`. The same list, with launch details for the harness,
@@ -90,85 +91,37 @@ is in [`components.json`](components.json).
 | [`generator/`](generator) | Synthetic keys (`make_keys.py`), tokens (`generate.py`), a verifier that checks each token changes exactly one property (`verify_tokens.py`), and a manual check of one running target (`check_target.py`) |
 | [`targets/`](targets) | One minimal API per component, with a Dockerfile and `CONFIG_NOTES.md` |
 | [`harness/`](harness) | `run.py` runs the matrix and writes `raw.csv`; `metrics.py` computes the metrics; `mock_server.py` and `mock_components.json` are fake targets for testing the harness |
-| [`scripts/`](scripts) | Local runner used for the initial target validation |
-| [`results/`](results) | Measurement results |
+| [`web/`](web) | JWT Lab, the web app for exploring tokens and results |
 
-`keys/` and `tokens/` are generated at run time and are not committed.
+`keys/`, `tokens/` and `results/` are generated at run time and are not committed.
 
 ## Getting started
 
-### Interactive web application
+Requires Docker with Docker Compose.
 
-Run `python web/server.py` using the Python environment with the generator dependencies
-installed, then open **http://127.0.0.1:8765**. JWT Lab presents the project, generates and
-inspects tokens, runs selected targets, and compares real results in charts and a matrix.
-See [`web/README.md`](web/README.md) for setup, runtime requirements, and data handling.
+```bash
+docker compose up --build
+```
 
-### Prerequisites
+This one command creates the synthetic keys, starts every target in both modes, runs the
+evaluation and computes the metrics. Open **http://127.0.0.1:8765** to explore the results
+in JWT Lab; they are saved in `results/compose/<timestamp>/`. Stop with Ctrl+C, then run
+`docker compose down`.
 
-- Python 3.11 or newer
-- Docker with Docker Compose
+On Linux, files are written as user ID 1000; if yours differs, start it with
+`HOST_UID=$(id -u) HOST_GID=$(id -g) docker compose up --build`.
 
-### Setup
+### Running the harness directly
+
+With Python 3.11 or newer:
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r generator/requirements.txt
 python generator/make_keys.py
+python harness/run.py          # writes results/raw.csv; see --help for --components and --pilot
+python harness/metrics.py      # writes the metric files beside results/raw.csv
 ```
-
-### Run the evaluation
-
-```bash
-python harness/run.py          # all components, default and hardened; writes results/raw.csv
-python harness/metrics.py      # reads results/raw.csv and writes the summary files beside it
-```
-
-For each component, the harness builds its service from
-[`docker-compose.yml`](docker-compose.yml), then recreates the container once per mode with
-the matching `CONFIG_MODE`. It regenerates the tokens before each component and mode, so
-the time-based tokens are always fresh, and stops each container when it is done.
-
-```bash
-python harness/run.py --components PyJWT jose     # only some components
-python harness/run.py --pilot                     # pilot subset, written to results/pilot/
-python harness/run.py --output /tmp/try           # write somewhere else
-python harness/run.py --help
-```
-
-### Run without Docker
-
-The targets can also run as local processes, one at a time on port 8080. This needs
-Node.js 22 and the .NET SDKs 8 and 10, plus the targets' dependencies:
-
-```bash
-pip install -r targets/python-pyjwt/requirements.txt
-(cd targets/node-jose && npm ci)
-(cd targets/node-jsonwebtoken && npm ci)
-(cd targets/node-express-jwt && npm ci)
-python harness/run.py --launcher native
-```
-
-### Test the harness without the real targets
-
-```bash
-python harness/run.py --launcher native --components-file harness/mock_components.json --output results/mock
-python harness/metrics.py results/mock/raw.csv --components-file harness/mock_components.json
-```
-
-One of the mock targets rejects the control token on purpose, so this run ends with exit
-code 3 and shows the setup check stopping that target.
-
-### Start the targets manually
-
-```bash
-docker compose up --build --wait                                  # default mode
-CONFIG_MODE=hardened docker compose up --build --force-recreate --wait
-python generator/generate.py && python generator/check_target.py http://localhost:8004
-docker compose down
-```
-
-The ports are listed under [Components](#components).
 
 ## Classification and metrics
 

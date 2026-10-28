@@ -159,13 +159,15 @@ def worker(kind, selected, launcher, output):
 def start_job(kind, body):
     selected = body.get("components", [])
     available = {c["name"] for c in read_json(ROOT / "components.json")}
-    launcher = body.get("launcher", "native")
+    # In Docker Compose every target already runs in both modes, so the web service reaches
+    # them over the compose network (JWT_LAB_LAUNCHER=network) instead of starting them.
+    launcher = os.environ.get("JWT_LAB_LAUNCHER") or body.get("launcher", "native")
     if kind == "run" and (not isinstance(selected, list) or not selected
                           or any(not isinstance(c, str) or c not in available for c in selected)
                           or len(selected) != len(set(selected))):
         raise ValueError("Select one or more known targets, without duplicates")
-    if launcher not in ("native", "docker"):
-        raise ValueError("Launcher must be native or docker")
+    if launcher not in ("native", "docker", "network"):
+        raise ValueError("Launcher must be native, docker or network")
     output = ROOT / "results" / "web" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S-%fZ")
     with LOCK:
         if JOB["status"] == "running":
@@ -243,9 +245,11 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--host", default="127.0.0.1",
+                        help="address to listen on; 0.0.0.0 only inside a container published on loopback")
     parser.add_argument("--open", action="store_true", help="open JWT Lab in your default browser")
     args = parser.parse_args()
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"JWT Lab: http://127.0.0.1:{server.server_port}", flush=True)
     if args.open:
         threading.Timer(0.3, lambda: webbrowser.open(f"http://127.0.0.1:{server.server_port}")).start()

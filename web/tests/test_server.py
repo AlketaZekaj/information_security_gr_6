@@ -113,6 +113,12 @@ class LabTests(unittest.TestCase):
                      {"components":["jose","jose"]}, {"components":["jose"],"launcher":"shell"}, []):
             self.assertEqual(self.request("/api/run",body,headers)[0],400)
 
+    def test_docker_setup_runs_evaluations_over_the_compose_network(self):
+        with patch.dict(lab.os.environ, {"JWT_LAB_LAUNCHER": "network"}), patch.object(lab, "worker") as worker:
+            status, _, _ = self.request("/api/run", {"components":["jose"],"launcher":"docker"}, {"X-Lab-Token":lab.CSRF})
+        self.assertEqual(status, 202)
+        self.assertEqual(worker.call_args.args[2], "network")
+
     def test_concurrent_operation_is_rejected(self):
         lab.JOB["status"] = "running"
         self.assertEqual(self.request("/api/generate",{}, {"X-Lab-Token":lab.CSRF})[0],409)
