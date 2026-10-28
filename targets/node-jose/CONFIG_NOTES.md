@@ -7,14 +7,8 @@ the SPKI RSA public key with importSPKI(pem, 'RS256'), then jwtVerify(token, key
 No issuer, audience, requiredClaims, algorithm allow-list or clock tolerance is
 passed to jwtVerify in default mode.
 
-Tested 2026-10-25 on native Windows: jose 6.2.13, Express 5.3.0, Node v24.11.1.
-Installed package versions matched package.json. package-lock.json is present.
-Both modes accepted CTRL-01. This run used the existing installed dependencies;
-it did not test npm ci or the Node 22.20.0 Docker image.
-
-See [full report](../../results/pilot/target-validation/REPORT.md),
-[raw 15-case results](../../results/pilot/target-validation/expanded-matrix/raw.csv), and
-[pre-run predictions](../../results/pilot/target-validation/expanded-matrix/PREDICTIONS.md).
+Versions: jose 6.2.13, Express 5.3.0, Node 22.20.0 (Docker image, installed with `npm ci`).
+Measured with the harness (`harness/run.py`); each run's `run.json` records the toolchain used. Both modes accept CTRL-01.
 
 ## Configuration changes
 
@@ -80,5 +74,4 @@ installed package's dist/types/types.d.ts and dist/webapi/lib/jwt_claims_set.js.
 The measured behavior agrees with that source; no contradiction was observed.
 
 Local runs support KEYS_PUB and POLICY; container defaults are /keys/public.pem
-and /policy/policy.json. See the report for reproduction commands. Docker and a
-fresh npm ci install still need validation before the team-wide main run.
+and /policy/policy.json.

@@ -51,6 +51,6 @@ For RQ1, each target receives the same 15-case matrix under its documented minim
 
 - This sample covers three ecosystems and six integration surfaces, not six independent cryptographic implementations or the entire JWT ecosystem.
 - express-jwt uses jsonwebtoken, so matching results are expected to be possible and remain useful. Its required `algorithms` option belongs to minimum setup, not extra hardening.
-- The saved .NET pilot uses IdentityModel 7.1.2 behind JwtBearer and 8.19.1 for the manual handler, with different .NET runtimes. A difference cannot be attributed solely to library versus middleware. See [version evidence](VERSIONS.md).
+- JwtBearer resolves IdentityModel 7.1.2, while the manual handler uses 8.19.1, with different .NET runtimes. A difference cannot be attributed solely to library versus middleware. See [version evidence](VERSIONS.md).
 - Wrappers control some HTTP error bodies and headers. Error-response findings must distinguish wrapper behavior from library behavior, as documented in each target's `CONFIG_NOTES.md`.
 - Evidence gathered for this document follows the initial pilot. It supports the rationale retrospectively and must not be described as a selection protocol fixed before testing.

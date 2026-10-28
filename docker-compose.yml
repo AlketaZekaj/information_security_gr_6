@@ -1,33 +1,44 @@
-# Generate keys/public.pem before starting: python generator/make_keys.py
-# Start default mode: docker compose up --build --wait
-# PowerShell hardened mode:
-#   $env:CONFIG_MODE = 'hardened'
-#   docker compose up --build --force-recreate --wait
-# Stop this environment: docker compose down
 name: jwt-evaluation
+
+x-tools: &tools
+  image: jwt-evaluation-tools
+  user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+  environment:
+    # The key the targets started with; the harness stops if keys/ no longer matches it.
+    TARGET_PUBLIC_KEY: /public-key/public.pem
+  volumes:
+    - ./:/repo
+    - public-key:/public-key:ro
 
 x-target: &target
   environment:
     CONFIG_MODE: ${CONFIG_MODE:-default}
   volumes:
-    - type: bind
-      source: ./keys/public.pem
-      target: /keys/public.pem
-      read_only: true
-      bind:
-        create_host_path: false
+    - public-key:/keys:ro
     - type: bind
       source: ./policy.json
       target: /policy/policy.json
       read_only: true
       bind:
         create_host_path: false
+  depends_on:
+    keys:
+      condition: service_completed_successfully
+
+x-hardened: &hardened
+  <<: *target
+  environment:
+    CONFIG_MODE: hardened
 
 x-healthcheck: &healthcheck
   interval: 5s
   timeout: 3s
   retries: 12
   start_period: 10s
+
+x-python-healthcheck: &python-healthcheck
+  <<: *healthcheck
+  test: ["CMD", "python", "-c", "import urllib.request; r = urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2); raise SystemExit(0 if r.status == 200 else 1)"]
 
 x-node-healthcheck: &node-healthcheck
   <<: *healthcheck
@@ -41,50 +52,170 @@ x-dotnet-healthcheck: &dotnet-healthcheck
   <<: *healthcheck
   test: ["CMD", "curl", "--fail", "--silent", "--show-error", "--max-time", "2", "http://127.0.0.1:8080/health"]
 
+x-java-healthcheck: &java-healthcheck
+  <<: *dotnet-healthcheck
+  start_period: 30s
+
 services:
+  keys:
+    <<: *tools
+    build:
+      context: ./generator
+      dockerfile: ../web/Dockerfile
+    pull_policy: build
+    user: "0:0"
+    volumes:
+      - ./:/repo
+      - public-key:/public-key
+    command:
+      - sh
+      - -c
+      - >-
+        python generator/make_keys.py
+        && (chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} keys || true)
+        && cp keys/public.pem /public-key/public.pem
+        && chmod 644 /public-key/public.pem
+
   python-pyjwt:
     <<: *target
     build: ./targets/python-pyjwt
+    image: jwt-evaluation-python-pyjwt
+    pull_policy: build
     ports: ["127.0.0.1:8001:8080"]
-    healthcheck:
-      <<: *healthcheck
-      test: ["CMD", "python", "-c", "import urllib.request; r = urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=2); raise SystemExit(0 if r.status == 200 else 1)"]
+    healthcheck: *python-healthcheck
+
+  python-pyjwt-hardened:
+    <<: *hardened
+    image: jwt-evaluation-python-pyjwt
+    pull_policy: never
+    healthcheck: *python-healthcheck
 
   dotnet-jwtbearer:
     <<: *target
     build: ./targets/dotnet-jwtbearer
+    image: jwt-evaluation-dotnet-jwtbearer
+    pull_policy: build
     ports: ["127.0.0.1:8002:8080"]
+    healthcheck: *dotnet-healthcheck
+
+  dotnet-jwtbearer-hardened:
+    <<: *hardened
+    image: jwt-evaluation-dotnet-jwtbearer
+    pull_policy: never
     healthcheck: *dotnet-healthcheck
 
   node-jsonwebtoken:
     <<: *target
     build: ./targets/node-jsonwebtoken
+    image: jwt-evaluation-node-jsonwebtoken
+    pull_policy: build
     ports: ["127.0.0.1:8003:8080"]
+    healthcheck: *node-healthcheck
+
+  node-jsonwebtoken-hardened:
+    <<: *hardened
+    image: jwt-evaluation-node-jsonwebtoken
+    pull_policy: never
     healthcheck: *node-healthcheck
 
   node-jose:
     <<: *target
     build: ./targets/node-jose
+    image: jwt-evaluation-node-jose
+    pull_policy: build
     ports: ["127.0.0.1:8004:8080"]
+    healthcheck: *node-healthcheck
+
+  node-jose-hardened:
+    <<: *hardened
+    image: jwt-evaluation-node-jose
+    pull_policy: never
     healthcheck: *node-healthcheck
 
   node-express-jwt:
     <<: *target
     build: ./targets/node-express-jwt
+    image: jwt-evaluation-node-express-jwt
+    pull_policy: build
     ports: ["127.0.0.1:8005:8080"]
+    healthcheck: *node-healthcheck
+
+  node-express-jwt-hardened:
+    <<: *hardened
+    image: jwt-evaluation-node-express-jwt
+    pull_policy: never
     healthcheck: *node-healthcheck
 
   dotnet-jsonwebtokenhandler:
     <<: *target
     build: ./targets/dotnet-jsonwebtokenhandler
+    image: jwt-evaluation-dotnet-jsonwebtokenhandler
+    pull_policy: build
     ports: ["127.0.0.1:8006:8080"]
+    healthcheck: *dotnet-healthcheck
+
+  dotnet-jsonwebtokenhandler-hardened:
+    <<: *hardened
+    image: jwt-evaluation-dotnet-jsonwebtokenhandler
+    pull_policy: never
     healthcheck: *dotnet-healthcheck
 
   java-spring-security:
     <<: *target
     build: ./targets/java-spring-security
+    image: jwt-evaluation-java-spring-security
+    pull_policy: build
     ports: ["127.0.0.1:8007:8080"]
+    healthcheck: *java-healthcheck
+
+  java-spring-security-hardened:
+    <<: *hardened
+    image: jwt-evaluation-java-spring-security
+    pull_policy: never
+    healthcheck: *java-healthcheck
+
+  # Waits for each target's /health itself, so a target that fails to start becomes a setup
+  # error for that target only. Results go to results/compose/<UTC timestamp>/.
+  evaluation:
+    <<: *tools
+    pull_policy: never
+    depends_on:
+      python-pyjwt: {condition: service_started}
+      python-pyjwt-hardened: {condition: service_started}
+      dotnet-jwtbearer: {condition: service_started}
+      dotnet-jwtbearer-hardened: {condition: service_started}
+      node-jsonwebtoken: {condition: service_started}
+      node-jsonwebtoken-hardened: {condition: service_started}
+      node-jose: {condition: service_started}
+      node-jose-hardened: {condition: service_started}
+      node-express-jwt: {condition: service_started}
+      node-express-jwt-hardened: {condition: service_started}
+      dotnet-jsonwebtokenhandler: {condition: service_started}
+      dotnet-jsonwebtokenhandler-hardened: {condition: service_started}
+      java-spring-security: {condition: service_started}
+      java-spring-security-hardened: {condition: service_started}
+    command:
+      - sh
+      - -c
+      - >-
+        out=results/compose/$$(date -u +%Y%m%dT%H%M%SZ);
+        python harness/run.py --launcher network --output "$$out";
+        status=$$?;
+        if [ -f "$$out/raw.csv" ]; then python harness/metrics.py "$$out/raw.csv"; fi;
+        exit $$status
+
+  # JWT Lab: overview, token studio, evaluations and results explorer. Its evaluations reach
+  # the running targets over the compose network, so it needs no access to Docker.
+  web:
+    <<: *tools
+    pull_policy: never
+    environment:
+      TARGET_PUBLIC_KEY: /public-key/public.pem
+      JWT_LAB_LAUNCHER: network
+    ports: ["127.0.0.1:8765:8765"]
     healthcheck:
       <<: *healthcheck
-      start_period: 30s
-      test: ["CMD", "curl", "--fail", "--silent", "--show-error", "--max-time", "2", "http://127.0.0.1:8080/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; r = urllib.request.urlopen('http://127.0.0.1:8765/', timeout=2); raise SystemExit(0 if r.status == 200 else 1)"]
+
+volumes:
+  public-key:

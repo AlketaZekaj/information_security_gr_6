@@ -15,21 +15,11 @@ Recorded on 27 October 2026. Package declarations describe the current repositor
 
 Node dependencies are installed with `npm ci`; the linked lock files record transitive versions and integrity hashes. The generator pins cryptography 50.0.2, cffi 2.1.1 and pycparser 3.12 in [its requirements](generator/requirements.txt).
 
-## Saved native pilot: 25 October 2026
+## Resolved .NET packages
 
-Source: [expanded-matrix run.json](results/pilot/target-validation/expanded-matrix/run.json). This run covers both .NET targets and jose, with 15 cases in each of two modes. It ran on Windows 10.0.26200, x64, using Python 3.11.0. Docker was unavailable.
+Read from the built images (`/app/*.deps.json`). The two .NET targets use different framework and IdentityModel versions, so their comparison cannot isolate middleware versus manual validation as the only variable.
 
-| Target | Build/runtime recorded in the pilot |
-|---|---|
-| JwtBearer | SDK 8.0.403; .NET and ASP.NET Core runtime 8.0.10 |
-| JsonWebTokenHandler | SDK 10.0.402; .NET and ASP.NET Core runtime 10.0.13 |
-| jose | Node v24.11.1 |
-
-The two .NET targets use different framework and IdentityModel versions. Their comparison cannot isolate middleware versus manual validation as the only variable.
-
-### Resolved .NET packages in that pilot
-
-#### dotnet-jwtbearer
+### dotnet-jwtbearer
 
 | Package | Version |
 |---|---|
@@ -40,8 +30,9 @@ The two .NET targets use different framework and IdentityModel versions. Their c
 | Microsoft.IdentityModel.Protocols | 7.1.2 |
 | Microsoft.IdentityModel.Protocols.OpenIdConnect | 7.1.2 |
 | Microsoft.IdentityModel.Tokens | 7.1.2 |
+| System.IdentityModel.Tokens.Jwt | 7.1.2 |
 
-#### dotnet-jsonwebtokenhandler
+### dotnet-jsonwebtokenhandler
 
 | Package | Version |
 |---|---|
@@ -53,7 +44,7 @@ The two .NET targets use different framework and IdentityModel versions. Their c
 
 ## Docker images declared in the repository
 
-These are configured image references, not proof of a successful container run. Container and clean-machine validation remain pending in the saved pilot notes.
+The images every target is built from.
 
 | Target | Stage | Image reference |
 |---|---|---|
@@ -70,122 +61,6 @@ These are configured image references, not proof of a successful container run. 
 
 Every base image is pinned by digest, so a rebuild uses exactly the same image. The SDK and runtime versions in parentheses were read from the pinned .NET images (`dotnet --version`, `dotnet --list-runtimes`). OS packages installed by apt are not pinned.
 
-## Local environment inspected on 27 October 2026
-
-`dotnet --list-sdks` reports 7.0.101, 8.0.403 and 10.0.403. Relevant installed .NET/ASP.NET Core runtimes are 8.0.10 and 10.0.14. `node --version` reports v24.11.1; the repository virtual environment reports Python 3.11.0. The current machine therefore differs from the saved .NET 10 pilot. No root `global.json` pins SDK selection.
-
-The current `dotnet --info` command printed SDK 10.0.403 and host 10.0.14 but also reported access denied while inspecting Windows services. The successful SDK/runtime listing commands above were used for today's inventory. Complete successful `dotnet --info` output from each pilot toolchain is preserved below.
-
-### Pilot dotnet --info: dotnet-jwtbearer
-
-```text
-.NET SDK:
- Version:           8.0.403
- Commit:            c64aa40a71
- Workload version:  8.0.400-manifests.18f19b92
- MSBuild version:   17.11.9+a69bbaaf5
-
-Runtime Environment:
- OS Name:     Windows
- OS Version:  10.0.26200
- OS Platform: Windows
- RID:         win-x64
- Base Path:   C:\Program Files\dotnet\sdk\8.0.403\
-
-.NET workloads installed:
-Configured to use loose manifests when installing new manifests.
-There are no installed workloads to display.
-
-Host:
-  Version:      8.0.10
-  Architecture: x64
-  Commit:       81cabf2857
-
-.NET SDKs installed:
-  7.0.101 [C:\Program Files\dotnet\sdk]
-  8.0.403 [C:\Program Files\dotnet\sdk]
-
-.NET runtimes installed:
-  Microsoft.AspNetCore.App 6.0.12 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 7.0.1 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 8.0.10 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 6.0.12 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-  Microsoft.NETCore.App 7.0.0 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-  Microsoft.NETCore.App 7.0.1 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-  Microsoft.NETCore.App 8.0.10 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]
-  Microsoft.WindowsDesktop.App 6.0.12 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]
-  Microsoft.WindowsDesktop.App 7.0.0 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]
-  Microsoft.WindowsDesktop.App 7.0.1 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]
-  Microsoft.WindowsDesktop.App 8.0.10 [C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App]
-
-Other architectures found:
-  x86   [C:\Program Files (x86)\dotnet]
-    registered at [HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x86\InstallLocation]
-
-Environment variables:
-  Not set
-
-global.json file:
-  Not found
-
-Learn more:
-  https://aka.ms/dotnet/info
-
-Download .NET:
-  https://aka.ms/dotnet/download
-```
-
-### Pilot dotnet --info: dotnet-jsonwebtokenhandler
-
-```text
-.NET SDK:
- Version:           10.0.402
- Commit:            a8dd0577c5
- Workload version:  10.0.400-manifests.da132f47
- MSBuild version:   18.9.15+a8dd0577c
-
-Runtime Environment:
- OS Name:     Windows
- OS Version:  10.0.26200
- OS Platform: Windows
- RID:         win-x64
- Base Path:   <repository>\.tools\dotnet\sdk\10.0.402\
-
-.NET workloads installed:
-There are no installed workloads to display.
-Configured to use workload sets when installing new manifests.
-No workload sets are installed. Run "dotnet workload restore" to install a workload set.
-
-Host:
-  Version:      10.0.13
-  Architecture: x64
-  Commit:       4099f83977
-
-.NET SDKs installed:
-  10.0.402 [<repository>\.tools\dotnet\sdk]
-
-.NET runtimes installed:
-  Microsoft.AspNetCore.App 10.0.13 [<repository>\.tools\dotnet\shared\Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 10.0.13 [<repository>\.tools\dotnet\shared\Microsoft.NETCore.App]
-  Microsoft.WindowsDesktop.App 10.0.13 [<repository>\.tools\dotnet\shared\Microsoft.WindowsDesktop.App]
-
-Other architectures found:
-  x86   [C:\Program Files (x86)\dotnet]
-    registered at [HKLM\SOFTWARE\dotnet\Setup\InstalledVersions\x86\InstallLocation]
-
-Environment variables:
-  Not set
-
-global.json file:
-  Not found
-
-Learn more:
-  https://aka.ms/dotnet/info
-
-Download .NET:
-  https://aka.ms/dotnet/download
-```
-
 ## Capture for the final run
 
-Keep the final run metadata with its commit, OS, interpreter versions and resolved packages. Record `docker version`, `docker compose version`, image IDs/digests and SDK/runtime versions from the built containers. Regenerate the full matrix after an environment or dependency change; the existing pilot is not evidence for untested container versions.
+Keep the final run metadata with its commit, OS, interpreter versions and resolved packages. Record `docker version`, `docker compose version`, image IDs/digests and SDK/runtime versions from the built containers. Regenerate the full matrix after an environment or dependency change.

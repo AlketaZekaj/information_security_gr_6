@@ -22,6 +22,7 @@ results/mock/
 
 # Local web UI evaluation runs (export explicitly when collecting evidence)
 results/web/
+results/compose/
 
 # Local editor settings and environment files
 .vscode/

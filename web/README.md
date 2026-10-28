@@ -7,7 +7,18 @@ or additional web dependencies are needed.
 
 ## Start
 
-On Windows, double-click **`web/Start JWT Lab.cmd`** to start the server and open the
+With Docker, from the repository root:
+
+```bash
+docker compose up --build
+```
+
+This also runs the full evaluation; open **http://127.0.0.1:8765** to explore its results.
+The container mounts the repository, so tokens and results are shared with the host.
+Evaluations started in the app reach the running targets over the compose network, so the
+launch-mode choice does not apply here.
+
+Without Docker: on Windows, double-click **`web/Start JWT Lab.cmd`** to start the server and open the
 application in your browser. Keep its terminal window open while using the application.
 
 From the repository root, use the Python environment containing the generator dependencies:

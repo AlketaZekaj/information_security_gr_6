@@ -19,6 +19,8 @@ Launchers (how a target is started):
   native  start the target as a local process, as described in components.json; the
           toolchain (Python, Node, .NET) must be installed and the targets' dependencies
           present (pip install / npm ci)
+  network inside docker compose up: each component already runs as <service> (default)
+          and <service>-hardened, reached by service name on the compose network
   none    the targets are already running on their components.json ports; only one
           --configs value is allowed, because the harness cannot switch their mode
 
@@ -245,7 +247,7 @@ def build_all_docker(components, logs):
         return set()
     print(f"building {len(services)} image(s) in parallel...", flush=True)
     with (logs / "build-all.log").open("w", encoding="utf-8") as log:
-        return set(services) if compose(["build", *services], log) else set()
+        return set(services) if compose(["build", "--with-dependencies", *services], log) else set()
 
 
 def build_docker(component, logs):
@@ -253,7 +255,7 @@ def build_docker(component, logs):
     log_path = logs / f"{component['name']}-build.log"
     print(f"{component['name']}: building image...", flush=True)
     with log_path.open("w", encoding="utf-8") as log:
-        if not compose(["build", service], log):
+        if not compose(["build", "--with-dependencies", service], log):
             raise SetupError(f"docker compose build failed; see {relative(log_path)}")
 
 
@@ -264,6 +266,10 @@ def docker_target(component, config, logs, health_timeout):
     with log_path.open("w", encoding="utf-8") as log:
         try:
             # --force-recreate: a running container keeps its old CONFIG_MODE otherwise.
+            # Refresh the public key the targets share. Starting the one-shot keys service as
+            # a dependency of a recreated target fails, hence run first and --no-deps after.
+            if not compose(["run", "--rm", "--no-deps", "keys"], log, timeout=120):
+                raise SetupError(f"docker compose run keys failed; see {relative(log_path)}")
             if not compose(["up", "--detach", "--force-recreate", "--no-build", "--no-deps", service],
                            log, config, timeout=180):
                 raise SetupError(f"docker compose up failed; see {relative(log_path)}")
@@ -283,7 +289,16 @@ def running_target(component, config, logs, health_timeout):
     yield base_url
 
 
-LAUNCHERS = {"docker": docker_target, "native": native_target, "none": running_target}
+@contextlib.contextmanager
+def network_target(component, config, logs, health_timeout):
+    # Every target container listens on 8080 (CONTRACT.md section 1).
+    service = compose_service(component)
+    base_url = f"http://{service if config == 'default' else service + '-hardened'}:8080"
+    wait_healthy(base_url, health_timeout)
+    yield base_url
+
+
+LAUNCHERS = {"docker": docker_target, "native": native_target, "network": network_target, "none": running_target}
 BUILDERS = {"docker": build_docker, "native": build_native}
 
 
@@ -353,7 +368,10 @@ def select_components(available, names):
 
 
 def git_commit():
-    result = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True)
+    try:
+        result = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True)
+    except OSError:  # git is not installed
+        return "unknown"
     return result.stdout.strip() if result.returncode == 0 else "unknown"
 
 
@@ -403,6 +421,11 @@ def main():
         # A missing key would otherwise surface as one confusing failure per component.
         if not (ROOT / "keys" / "public.pem").is_file():
             raise AbortRun("keys/public.pem is missing or not a file: run python generator/make_keys.py")
+        target_key = Path(os.environ.get("TARGET_PUBLIC_KEY", ""))
+        if (args.launcher == "network" and target_key.is_file()
+                and target_key.read_bytes() != (ROOT / "keys" / "public.pem").read_bytes()):
+            raise AbortRun("keys/ changed after the targets started: restart them with "
+                           "docker compose down && docker compose up --build")
         if args.launcher == "docker" and not compose_available():
             raise AbortRun("docker compose is not available: install Docker or use --launcher native")
     except AbortRun as error:
