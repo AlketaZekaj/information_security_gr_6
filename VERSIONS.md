@@ -12,6 +12,7 @@ Recorded on 27 October 2026. Package declarations describe the current repositor
 | jose | jose 6.2.13 | Express 5.3.0; Node >=22.12.0 | [lock file](targets/node-jose/package-lock.json) |
 | jsonwebtoken | jsonwebtoken 9.0.3 | Node >=22 | [lock file](targets/node-jsonwebtoken/package-lock.json) |
 | express-jwt | express-jwt 8.5.1 | Express 5.3.0; Node >=22 | [lock file](targets/node-express-jwt/package-lock.json) |
+| golang-jwt | github.com/golang-jwt/jwt/v5 5.3.1 | Go 1.26; standard library only | [go.mod](targets/go-golang-jwt/go.mod), [go.sum](targets/go-golang-jwt/go.sum) |
 
 Node dependencies are installed with `npm ci`; the linked lock files record transitive versions and integrity hashes. The generator pins cryptography 50.0.2, cffi 2.1.1 and pycparser 3.12 in [its requirements](generator/requirements.txt).
 
@@ -52,6 +53,8 @@ The images every target is built from.
 | dotnet-jsonwebtokenhandler | final (runtime 10.0.14) | `mcr.microsoft.com/dotnet/aspnet:10.0@sha256:de0ee358cdd672f7017a003bed21e9ac9ed48a27c922a59b18175b6e82fa7fee` |
 | dotnet-jwtbearer | build (SDK 8.0.427) | `mcr.microsoft.com/dotnet/sdk:8.0@sha256:6ba9644da07bb5b560a402acec9ca38711a0762969f1b61da261df5c9f6f85da` |
 | dotnet-jwtbearer | final (runtime 8.0.33) | `mcr.microsoft.com/dotnet/aspnet:8.0@sha256:ea721098d6ea2894ff9bd8387821a1659d4765d6c014b8d648bb1da16f016f5a` |
+| go-golang-jwt | build (Go 1.26.10) | `golang:1.26-bookworm@sha256:23ce71337b726608afb1bc00986e630a05034a87a87ea1fc2cd1ae5cf33387eb` |
+| go-golang-jwt | final | `scratch` (no base image; the static binary is the only content) |
 | java-spring-security | build | `maven:3.9-eclipse-temurin-21@sha256:99e61abcff91a9b1333463bd8451fb18495d6eba9250ac66a338b518f8278320` |
 | java-spring-security | final | `eclipse-temurin:21-jre@sha256:227118764cccd3c3294617061aaa93a08309c63a395eefa83e6b35032992ea99` |
 | node-express-jwt | runtime | `node:22.20.0-slim@sha256:b21fe589dfbe5cc39365d0544b9be3f1f33f55f3c86c87a76ff65a02f8f5848e` |

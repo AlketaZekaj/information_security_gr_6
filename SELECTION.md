@@ -14,6 +14,7 @@ We use a purposive sample across Python, Node.js and .NET. Each component must v
 | jsonwebtoken | Node.js library | Provides a direct Node validation API and the underlying validator used by express-jwt. | [API and options](https://github.com/auth0/node-jsonwebtoken) |
 | jose | Node.js library | Adds another Node implementation with a documented JWT/JOSE API and support for Web-interoperable runtimes. | [API and supported runtimes](https://github.com/panva/jose) |
 | express-jwt | Express middleware | Enables comparison of direct jsonwebtoken calls with middleware integration, required algorithm configuration and error handling. | [Usage and options](https://github.com/auth0/express-jwt) |
+| golang-jwt | Go library | Adds an independent implementation in a fifth ecosystem, with a direct validation API and explicit parser options that are not on by default. | [Documentation](https://golang-jwt.github.io/jwt/usage/parse/) |
 
 ## Adoption evidence
 

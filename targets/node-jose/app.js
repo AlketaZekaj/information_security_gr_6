@@ -18,11 +18,11 @@ const key = await importSPKI(pem, 'RS256');
 let verifyOptions;
 if (mode === 'hardened') {
   verifyOptions = {
-    algorithms: ['RS256'],
+    algorithms: policy.allowed_algorithms,
     issuer: policy.issuer,
     audience: policy.audience,
-    requiredClaims: ['iss', 'aud', 'exp'],
-    clockTolerance: 0,
+    requiredClaims: policy.required_claims,
+    clockTolerance: policy.clock_skew_seconds,
   };
 }
 
