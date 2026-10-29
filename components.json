@@ -80,5 +80,19 @@
       "command": ["java", "-jar", "target/app.jar"],
       "port": 8080
     }
+  },
+  {
+    "name": "golang-jwt",
+    "version": "5.3.1",
+    "type": "library",
+    "response_author": "wrapper",
+    "port": 8008,
+    "target_dir": "targets/go-golang-jwt",
+    "service": "go-golang-jwt",
+    "native": {
+      "build": ["go", "build", "-o", "bin/app", "."],
+      "command": ["bin/app"],
+      "port": 8080
+    }
   }
 ]

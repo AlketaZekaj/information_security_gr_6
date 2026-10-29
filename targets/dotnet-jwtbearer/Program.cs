@@ -39,9 +39,9 @@ if (mode == "hardened")
     tokenValidationParameters.ValidateLifetime = true;
     tokenValidationParameters.ValidateIssuerSigningKey = true;
     tokenValidationParameters.RequireSignedTokens = true;
-    tokenValidationParameters.RequireExpirationTime = true;
-    tokenValidationParameters.ValidAlgorithms = new[] { SecurityAlgorithms.RsaSha256 };
-    tokenValidationParameters.ClockSkew = TimeSpan.Zero;
+    tokenValidationParameters.RequireExpirationTime = policy.GetProperty("required_claims").EnumerateArray().Any(claim => claim.GetString() == "exp");
+    tokenValidationParameters.ValidAlgorithms = policy.GetProperty("allowed_algorithms").EnumerateArray().Select(algorithm => algorithm.GetString()!).ToArray();
+    tokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(policy.GetProperty("clock_skew_seconds").GetInt32());
 }
 
 Console.WriteLine($"JwtBearer target starting in CONFIG_MODE={mode}");

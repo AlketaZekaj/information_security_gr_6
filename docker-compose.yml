@@ -56,6 +56,10 @@ x-java-healthcheck: &java-healthcheck
   <<: *dotnet-healthcheck
   start_period: 30s
 
+x-go-healthcheck: &go-healthcheck
+  <<: *healthcheck
+  test: ["CMD", "/server", "-healthcheck"]
+
 services:
   keys:
     <<: *tools
@@ -174,6 +178,20 @@ services:
     pull_policy: never
     healthcheck: *java-healthcheck
 
+  go-golang-jwt:
+    <<: *target
+    build: ./targets/go-golang-jwt
+    image: jwt-evaluation-go-golang-jwt
+    pull_policy: build
+    ports: ["127.0.0.1:8008:8080"]
+    healthcheck: *go-healthcheck
+
+  go-golang-jwt-hardened:
+    <<: *hardened
+    image: jwt-evaluation-go-golang-jwt
+    pull_policy: never
+    healthcheck: *go-healthcheck
+
   # Waits for each target's /health itself, so a target that fails to start becomes a setup
   # error for that target only. Results go to results/compose/<UTC timestamp>/.
   evaluation:
@@ -194,6 +212,8 @@ services:
       dotnet-jsonwebtokenhandler-hardened: {condition: service_started}
       java-spring-security: {condition: service_started}
       java-spring-security-hardened: {condition: service_started}
+      go-golang-jwt: {condition: service_started}
+      go-golang-jwt-hardened: {condition: service_started}
     command:
       - sh
       - -c
