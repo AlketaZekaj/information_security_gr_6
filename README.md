@@ -17,6 +17,21 @@ the box, and what has to be configured to make them enforce one common policy.
 - **RQ2:** "How does their validation behavior change when configured according to applicable
   RFC 8725 recommendations, and what configuration changes are required?"
 
+## JWT Lab screenshots
+
+The local web app at **http://127.0.0.1:8765** lets you explore the study and its measured results.
+
+### Overview
+
+![JWT Lab overview showing the research question and study workflow](docs/screenshots/overview.png)
+
+### Token studio
+
+![Token studio showing the control token, decoded claims, and test cases](docs/screenshots/tokens.png)
+
+### Results explorer
+
+![Results explorer comparing measured default and hardened false-accept rates](docs/screenshots/results.png)
 ## How it works
 
 1. Every component under test (a *target*) is wrapped in the same minimal API:
